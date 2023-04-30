@@ -1,3 +1,4 @@
+#include "PrecompileHeader.h"
 #include "GameEngineImage.h"
 #include <GameEngineBase/GameEnginePath.h>
 #include <GameEngineBase/GameEngineDebug.h>
@@ -87,7 +88,7 @@ bool GameEngineImage::ImageCreate(const float4& _Scale)
 
 bool GameEngineImage::ImageLoad(const GameEnginePath& _Path)
 {
-	return ImageLoad(_Path.GetPathToString().c_str());
+	return ImageLoad(_Path.GetFullPath().c_str());
 }
 
 #define TEST(Value) Value
