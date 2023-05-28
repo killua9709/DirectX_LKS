@@ -5,7 +5,12 @@
 #include <GameEngineCore/GameEngineLevel.h>
 #include <GameEngineCore/GameEngineCamera.h>
 #include <GameEngineCore/GameEngineRenderer.h>
+#include <GameEngineCore/GameEngineCollision.h>
 #include <GameEnginePlatform/GameEngineInput.h>
+#include <GameEngineCore/GameEngineVideo.h>
+#include <GameEngineCore/GameEngineSprite.h>
+#include "TestObject.h"
+#include "MyContentSpriteRenderer.h"
 
 Player::Player()
 {
@@ -18,118 +23,9 @@ Player::~Player()
 
 void Player::Update(float _DeltaTime)
 {
+	FSM.Update(_DeltaTime);
 
-	float RotSpeed = 180.0f;
 
-	float Speed = 200.0f;
-
-	// Render0->GetTransform()->SetWorldRotation(float4::Zero);
-
-	if (true == GameEngineInput::IsPress("PlayerSpeedBoost"))
-	{
-		Speed = 500.0f;
-	}
-
-	if (true == GameEngineInput::IsDown("PlayerMoveLeft"))
-	{
-		// Render0->GetTransform()->SetLocalNegativeScaleX();
-	}
-	else if (true == GameEngineInput::IsDown("PlayerMoveRight"))
-	{
-		// Render0->GetTransform()->SetLocalPositiveScaleX();
-	}
-
-	if (true == GameEngineInput::IsPress("PlayerMoveLeft"))
-	{
-		GetTransform()->AddLocalPosition(float4::Left * Speed * _DeltaTime);
-	}
-	if (true == GameEngineInput::IsPress("PlayerMoveRight"))
-	{
-		GetTransform()->AddLocalPosition(float4::Right * Speed * _DeltaTime);
-	}
-	if (true == GameEngineInput::IsPress("PlayerMoveUp"))
-	{
-		GetTransform()->AddLocalPosition(float4::Up * Speed * _DeltaTime);
-	}
-	if (true == GameEngineInput::IsPress("PlayerMoveDown"))
-	{
-		GetTransform()->AddLocalPosition(float4::Down * Speed * _DeltaTime);
-	}
-	if (true == GameEngineInput::IsPress("PlayerMoveForward"))
-	{
-		GetTransform()->AddLocalPosition(GetTransform()->GetLocalForwardVector() * Speed * _DeltaTime);
-		// GetTransform()->AddLocalPosition(float4::Forward * Speed * _DeltaTime);
-	}
-	if (true == GameEngineInput::IsPress("PlayerMoveBack"))
-	{
-		GetTransform()->AddLocalPosition(float4::Back * Speed * _DeltaTime);
-	}
-
-	if (true == GameEngineInput::IsPress("PlayerRotY+"))
-	{
-		GetTransform()->AddLocalRotation({ 0.0f, RotSpeed * _DeltaTime, 0.0f });
-	}
-	if (true == GameEngineInput::IsPress("PlayerRotY-"))
-	{
-		GetTransform()->AddLocalRotation({ 0.0f, -RotSpeed * _DeltaTime, 0.0f });
-	}
-	if (true == GameEngineInput::IsPress("PlayerRotZ+"))
-	{
-		GetTransform()->AddLocalRotation({ 0.0f, 0.0f, RotSpeed * _DeltaTime });
-	}
-	if (true == GameEngineInput::IsPress("PlayerRotZ-"))
-	{
-		GetTransform()->AddLocalRotation({ 0.0f, 0.0f, -RotSpeed * _DeltaTime });
-	}
-	if (true == GameEngineInput::IsPress("PlayerRotX+"))
-	{
-		GetTransform()->AddLocalRotation({ RotSpeed * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (true == GameEngineInput::IsPress("PlayerRotX-"))
-	{
-		GetTransform()->AddLocalRotation({ -RotSpeed * _DeltaTime, 0.0f, 0.0f });
-	}
-
-	float ScaleSpeed = 10.0f;
-
-	if (true == GameEngineInput::IsPress("PlayerScaleY+"))
-	{
-		GetTransform()->AddLocalScale({ 0.0f, ScaleSpeed * _DeltaTime, 0.0f });
-	}
-	if (true == GameEngineInput::IsPress("PlayerScaleY-"))
-	{
-		GetTransform()->AddLocalScale({ 0.0f, -ScaleSpeed * _DeltaTime, 0.0f });
-	}
-	if (true == GameEngineInput::IsPress("PlayerScaleZ+"))
-	{
-		GetTransform()->AddLocalScale({ 0.0f, 0.0f, ScaleSpeed * _DeltaTime });
-	}
-	if (true == GameEngineInput::IsPress("PlayerScaleZ-"))
-	{
-		GetTransform()->AddLocalScale({ 0.0f, 0.0f, -ScaleSpeed * _DeltaTime });
-	}
-	if (true == GameEngineInput::IsPress("PlayerScaleX+"))
-	{
-		GetTransform()->AddLocalScale({ ScaleSpeed * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (true == GameEngineInput::IsPress("PlayerScaleX-"))
-	{
-		GetTransform()->AddLocalScale({ -ScaleSpeed * _DeltaTime, 0.0f, 0.0f });
-	}
-
-	float4 GetLocalScale = Render0->GetTransform()->GetLocalScale();
-	float4 GetWorldScale = Render0->GetTransform()->GetWorldScale();
-
-	float4 GetLocalRotation = Render0->GetTransform()->GetLocalRotation();
-	float4 GetWorldRotation = Render0->GetTransform()->GetWorldRotation();
-
-	float4 GetLocalPosition = Render0->GetTransform()->GetLocalPosition();
-	float4 GetWorldPosition = Render0->GetTransform()->GetWorldPosition();
-
-	if (5.0f <= Render0->GetLiveTime())
-	{
-		Render0->Off();
-	}
 }
 
 void Player::Start()
@@ -161,28 +57,7 @@ void Player::Start()
 	}
 
 
-	// 나는 스케일을 1로 고정해 놓는게 좋다.
-	Render0 = CreateComponent<GameEngineSpriteRenderer>();
-	Render0->SetTexture("Test.png");
-	Render0->GetTransform()->SetLocalScale({ 100.0f, 100.0f , 100.0f });
-
-	Render1 = CreateComponent<GameEngineSpriteRenderer>();
-	Render1->SetTexture("Test.png");
-	Render1->GetTransform()->SetLocalScale({ 100.0f, 100.0f , 100.0f });
-	Render1->GetTransform()->SetLocalPosition({ -200.0f, 0.0f, 0.0f });
-
-	Render2 = CreateComponent<GameEngineSpriteRenderer>();
-	Render2->SetTexture("Test.png");
-	Render2->GetTransform()->SetLocalScale({ 100.0f, 100.0f , 100.0f });
-	Render2->GetTransform()->SetLocalPosition({ 200.0f, 0.0f, 0.0f });
-
-	//Render1 = CreateComponent<GameEngineRenderer>();
-	//Render1->SetPipeLine("2DTexture");
-	//Render1->GetTransform()->SetLocalPosition({ 200.0f, 0.0f , 0.0f });
-	//Render1->GetTransform()->SetLocalScale({ 100.0f, 100.0f , 100.0f });
-	// Render0->GetShaderResHelper().SetConstantBufferLink("TransformData", TestColor);
-
-	TestColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+	StateInit();
 }
 
 // 이건 디버깅용도나 
@@ -190,3 +65,53 @@ void Player::Render(float _Delta)
 {
 	// GetTransform()->AddLocalRotation({0.0f, 0.0f, 360.0f * _Delta});
 };
+
+void Player::LevelChangeStart() 
+{
+
+	if (nullptr == GameEngineSprite::Find("PlayerRun"))
+	{
+		GameEngineDirectory NewDir;
+		NewDir.MoveParentToDirectory("ContentResources");
+		NewDir.Move("ContentResources");
+		NewDir.Move("Texture");
+
+		// TestAnimation.png
+
+		GameEngineSprite::LoadFolder(NewDir.GetPlusFileName("PlayerRun").GetFullPath());
+
+		//GameEngineSprite::LoadSheet(NewDir.GetPlusFileName("Test\\TestAnimation.png").GetFullPath(), 3, 5);
+
+		// std::vector<GameEngineFile> File = NewDir.GetAllFile({ ".Png", });
+	}
+
+
+	if (nullptr == MainRenderer)
+	{
+		MainRenderer = CreateComponent<MyContentSpriteRenderer>();
+		MainRenderer->CreateAnimation({ .AnimationName = "Run", .SpriteName = "PlayerRun", .ScaleToTexture = true });
+		//MainRenderer->CreateAnimation({ "Win", "TestAnimation.png", 0, 5, 0.1f, true, true });
+		MainRenderer->SetAnimationStartEvent("Run", 0, [this]
+			{
+				int a = 0;
+
+				//std::shared_ptr<TestObject> Actor = GetLevel()->CreateActor<TestObject>();
+				//Actor->GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition());
+				//Actor->GetTransform()->SetLocalScale({100.0f, 100.0f, 1.0f});
+			});
+
+		MainRenderer->SetScaleRatio(1.0f);
+		MainRenderer->ChangeAnimation("Run");
+
+		{
+			Collsion = CreateComponent<GameEngineCollision>();
+			Collsion->GetTransform()->SetLocalScale({ 100.0f, 100.0f, 100.0f });
+			Collsion->SetOrder(3000);
+		}
+
+	}
+
+	// MainRenderer->SetScaleToTexture("Test.png");
+
+	// 리소스 로드를 해야할 것이다.
+}

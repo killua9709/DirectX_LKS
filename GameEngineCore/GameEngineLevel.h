@@ -1,15 +1,23 @@
 #pragma once
-#include "GameEngineUpdateObject.h"
+#include "GameEngineObject.h"
 #include <GameEngineBase\GameEngineTimeEvent.h>
 #include <string_view>
 #include <map>
+#include <GameEngineCore/GameEngineRenderTarget.h>
 
 // 설명 :
 class GameEngineActor;
 class GameEngineCamera;
-class GameEngineLevel : public GameEngineUpdateObject
+class GameEngineRenderer;
+class GameEngineCollision;
+class GameEngineLevel : public GameEngineObject
 {
+	friend class GameEngineRenderer;
+	friend class GameEngineCollision;
+	friend class GameEngineTransform;
 	friend class GameEngineCore;
+	friend class GameEngineActor;
+	friend class GameEngineTexture;
 
 public:
 	GameEngineTimeEvent TimeEvent;
@@ -24,10 +32,16 @@ public:
 	GameEngineLevel& operator=(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel& operator=(GameEngineLevel&& _Other) noexcept = delete;
 
-	template<typename ActorType >
-	std::shared_ptr<ActorType> CreateActor(const std::string_view& _Name)
+	template<typename ActorType>
+	std::shared_ptr<ActorType> CreateActorToName(const std::string_view& _Name = "")
 	{
 		return CreateActor<ActorType>(0, _Name);
+	}
+
+	template<typename ActorType, typename EnumType>
+	std::shared_ptr<ActorType> CreateActor(EnumType  _Order, const std::string_view& _Name = "")
+	{
+		return CreateActor<ActorType>(static_cast<int>(_Order), _Name);
 	}
 
 	template<typename ActorType >
@@ -55,6 +69,18 @@ public:
 		return MainCamera;
 	}
 
+	std::shared_ptr<GameEngineLevel> GetSharedThis()
+	{
+		return DynamicThis<GameEngineLevel>();
+	}
+
+	std::shared_ptr<GameEngineCamera> GetCamera(int _CameraOrder);
+
+	std::shared_ptr<GameEngineRenderTarget> GetLastTarget() 
+	{
+		return LastTarget;
+	}
+
 protected:
 	// 레벨이 바뀌어서 시작할때
 	virtual void LevelChangeStart();
@@ -65,15 +91,39 @@ protected:
 	void Render(float _DeltaTime);
 
 private:
+	// 모든 카메라의 내용이 다 종합된.
+	std::shared_ptr<GameEngineRenderTarget> LastTarget;
+
+
+	//      이름           경로
+	std::map<std::string, std::string> TexturePath;
+	std::map<std::string, std::string> LoadEndPath;
+
+	// 이미 뭔가가 다그려진 커다란 텍스처에 뭔가 변화를 주는것.
+
+	// 카메라
+	std::map<int, std::shared_ptr<GameEngineCamera>> Cameras;
 	std::shared_ptr<GameEngineCamera> MainCamera;
-	std::shared_ptr<GameEngineCamera> UICamera;
+
+	void PushCameraRenderer(std::shared_ptr<GameEngineRenderer> _Renderer, int _CameraOrder);
 
 	std::map<int, std::list<std::shared_ptr<GameEngineActor>>> Actors;
+
+	std::map<int, std::list<std::shared_ptr<GameEngineCollision>>> Collisions;
+
+	void PushCollision(std::shared_ptr<GameEngineCollision> _Collision);
 
 	void ActorInit(std::shared_ptr<GameEngineActor> _Actor, int _Order, GameEngineLevel* _Level);
 
 	void ActorUpdate(float _DeltaTime);
 	void ActorRender(float _DeltaTime);
+	void ActorRelease();
+	void ActorLevelChangeStart();
+	void ActorLevelChangeEnd();
+
+	void TextureUnLoad(GameEngineLevel* _NextLevel);
+
+	void TextureReLoad(GameEngineLevel* _PrevLevel);
 
 };
 

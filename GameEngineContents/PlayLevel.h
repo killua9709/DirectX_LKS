@@ -16,6 +16,9 @@ public:
 	PlayLevel& operator=(PlayLevel&& _Other) noexcept = delete;
 
 	std::shared_ptr<class GameEngineVideo> Video;
+	std::shared_ptr<class TestObject> Object3;
+
+	std::shared_ptr<class FadeEffect> FEffect;
 
 protected:
 	void Update(float _DeltaTime) override;
@@ -26,6 +29,7 @@ protected:
 
 
 private:
+	void PlayerCreate();
 
 
 };

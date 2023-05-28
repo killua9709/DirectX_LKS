@@ -2,6 +2,47 @@
 #include "GameEngineResource.h"
 #include <GameEngineCore/ThirdParty/DirectXTex/inc/DirectXTex.h>
 
+class GameEnginePixelColor 
+{
+public:
+	static GameEnginePixelColor Black;
+
+	union 
+	{
+		struct 
+		{
+			unsigned char r;
+			unsigned char g;
+			unsigned char b;
+			unsigned char a;
+		};
+
+		unsigned char ColorChar[4];
+		int Color;
+	};
+
+	bool operator==(GameEnginePixelColor _Color) 
+	{
+		return Color == _Color.Color;
+	}
+
+	float4 Tofloat4() 
+	{
+
+	}
+
+	GameEnginePixelColor() 
+	{
+
+	}
+
+	GameEnginePixelColor(char _r, char _g, char _b, char _a)
+		: r(_r), g(_g), b(_b), a(_a)
+	{
+
+	}
+};
+
 // 설명 :
 class GameEngineTexture : public GameEngineResource<GameEngineTexture>
 {
@@ -25,16 +66,14 @@ public:
 		return Load(_Path, NewPath.GetFileName());
 	}
 
+	static void PathCheck(const std::string_view& _Path, const std::string_view& _Name);
+
 	static std::shared_ptr<GameEngineTexture> Load(const std::string_view& _Path, const std::string_view& _Name) 
 	{
 		std::shared_ptr<GameEngineTexture> NewTexture = GameEngineResource::Create(_Name);
-		NewTexture->ResLoad(_Path);
-		return NewTexture;
-	}
 
-	static std::shared_ptr<GameEngineTexture> Create(const std::string_view& _Name, const std::string_view& _Path)
-	{
-		std::shared_ptr<GameEngineTexture> NewTexture = GameEngineResource::Create(_Name);
+		PathCheck(_Path, _Name);
+		NewTexture->ResLoad(_Path);
 		return NewTexture;
 	}
 
@@ -52,6 +91,44 @@ public:
 		return NewTexture;
 	}
 
+	static std::shared_ptr<GameEngineTexture> UnLoad(const std::string_view& _Name)
+	{
+		std::shared_ptr<GameEngineTexture> NewTexture = GameEngineResource::Find(_Name);
+
+		if (nullptr == NewTexture)
+		{
+			MsgAssert("존재하지 않는 텍스처를 언로드 하려고 했습니다.");
+		}
+
+		NewTexture->Release();
+		return NewTexture;
+	}
+
+	static std::shared_ptr<GameEngineTexture> ReLoad(const std::string_view& _Path)
+	{
+		GameEnginePath NewPath(_Path);
+		return ReLoad(_Path, NewPath.GetFileName());
+	}
+
+
+	static std::shared_ptr<GameEngineTexture> ReLoad(const std::string_view& _Path, const std::string_view& _Name)
+	{
+		std::shared_ptr<GameEngineTexture> NewTexture = GameEngineResource<GameEngineTexture>::Find(_Name);
+
+		if (nullptr == NewTexture)
+		{
+			MsgAssert("존재하지 않는 텍스처를 로드 하려고 했습니다.");
+		}
+
+		NewTexture->ResLoad(_Path);
+		return NewTexture;
+	}
+
+
+	ID3D11ShaderResourceView* GetSRV()
+	{
+		return SRV;
+	}
 
 	ID3D11RenderTargetView* GetRTV() 
 	{
@@ -63,15 +140,22 @@ public:
 		return DSV;
 	}
 
-	unsigned int GetWidth() 
+	int GetWidth() 
 	{
 		return Desc.Width;
 	}
 
-	unsigned int GetHeight()
+	int GetHeight()
 	{
 		return Desc.Height;
 	}
+
+	float4 GetScale() 
+	{
+		return float4(static_cast<float>(Desc.Width), static_cast<float>(Desc.Height));
+	}
+
+	GameEnginePixelColor GetPixel(int _X, int _Y, GameEnginePixelColor DefaultColor = GameEnginePixelColor::Black);
 
 protected:
 
@@ -93,9 +177,15 @@ private:
 	void ResCreate(const D3D11_TEXTURE2D_DESC& _Value);
 
 	void CreateRenderTargetView();
+	void CreateShaderResourcesView();
 	void CreateDepthStencilView();
 
 	void VSSetting(UINT _Slot);
 	void PSSetting(UINT _Slot);
+
+	void VSReset(UINT _Slot);
+	void PSReset(UINT _Slot);
+
+	void Release();
 };
 

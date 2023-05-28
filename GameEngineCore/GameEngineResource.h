@@ -65,6 +65,14 @@ public:
 
 	virtual void Setting() {}
 
+
+	static void ResourcesClear()
+	{
+		NamedResources.clear();
+		UnNamedRes.clear();
+	}
+
+
 protected:
 	static std::shared_ptr<ResourcesType> CreateUnNamed() 
 	{
@@ -92,12 +100,6 @@ protected:
 		return NewRes;
 	}
 
-
-	static void ResourcesClear()
-	{
-		NamedResources.clear();
-		UnNamedRes.clear();
-	}
 
 private:
 	std::string Path;

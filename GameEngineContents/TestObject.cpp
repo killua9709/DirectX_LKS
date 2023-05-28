@@ -24,4 +24,5 @@ void TestObject::Update(float _DeltaTime)
 void TestObject::Start()
 {
 	Render = CreateComponent<GameEngineSpriteRenderer>();
+	Render->CameraCullingOn();
 }

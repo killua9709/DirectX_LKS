@@ -81,6 +81,32 @@ void GameEngineTextureSetter::Setting()
 
 }
 
+void GameEngineTextureSetter::Reset()
+{
+	ShaderType Type = ParentShader->GetType();
+
+	switch (Type)
+	{
+	case ShaderType::None:
+	{
+		MsgAssert("어떤 쉐이더에 세팅될지 알수없는 상수버퍼 입니다.");
+		break;
+	}
+	case ShaderType::Vertex:
+	{
+		Res->VSReset(BindPoint);
+		break;
+	}
+	case ShaderType::Pixel:
+	{
+		Res->PSReset(BindPoint);
+		break;
+	}
+	default:
+		break;
+	}
+}
+
 void GameEngineSamplerSetter::Setting()
 {
 	ShaderType Type = ParentShader->GetType();
@@ -177,6 +203,34 @@ void GameEngineShaderResHelper::SetConstantBufferLink(const std::string_view& _N
 
 }
 
+void GameEngineShaderResHelper::SetTexture(const std::string_view& _SettingName, std::shared_ptr<GameEngineTexture> _Texture)
+{
+	if (nullptr == _Texture)
+	{
+		MsgAssert("nullptr인 텍스처를 세팅하려고 했습니다." + std::string(_SettingName));
+		return;
+	}
+
+	std::string UpperName = GameEngineString::ToUpper(_SettingName);
+
+	std::multimap<std::string, GameEngineTextureSetter>::iterator FindIter = TextureSetters.find(UpperName);
+
+	if (TextureSetters.end() == FindIter)
+	{
+		MsgAssert("쉐이더에서 이런 이름의 텍스처 세팅를 사용하지 않았습니다." + UpperName);
+		return;
+	}
+
+	std::multimap<std::string, GameEngineTextureSetter>::iterator NameStartIter = TextureSetters.lower_bound(UpperName);
+	std::multimap<std::string, GameEngineTextureSetter>::iterator NameEndIter = TextureSetters.upper_bound(UpperName);
+
+	for (; NameStartIter != NameEndIter; ++NameStartIter)
+	{
+		GameEngineTextureSetter& Setter = NameStartIter->second;
+		Setter.Res = _Texture;
+	}
+}
+
 void GameEngineShaderResHelper::SetTexture(const std::string_view& _SettingName, const std::string_view& _ImageName)
 {
 	std::string UpperName = GameEngineString::ToUpper(_SettingName);
@@ -206,4 +260,58 @@ void GameEngineShaderResHelper::SetTexture(const std::string_view& _SettingName,
 		Setter.Res = FindTex;
 	}
 
+}
+
+GameEngineTextureSetter* GameEngineShaderResHelper::GetTextureSetter(const std::string_view& _View)
+{
+	std::string UpperName = GameEngineString::ToUpper(_View);
+
+	std::multimap<std::string, GameEngineTextureSetter>::iterator FindIter = TextureSetters.find(UpperName);
+
+	if (FindIter == TextureSetters.end())
+	{
+		return nullptr;
+	}
+
+	return &(FindIter->second);
+
+}
+
+std::vector<GameEngineTextureSetter*> GameEngineShaderResHelper::GetTextureSetters(const std::string_view& _View)
+{
+	std::string UpperName = GameEngineString::ToUpper(_View);
+
+	std::multimap<std::string, GameEngineTextureSetter>::iterator FindIter = TextureSetters.find(UpperName);
+
+	std::vector<GameEngineTextureSetter*> Result;
+
+	if (FindIter == TextureSetters.end())
+	{
+		return Result;
+	}
+
+	std::multimap<std::string, GameEngineTextureSetter>::iterator NameStartIter = TextureSetters.lower_bound(UpperName);
+	std::multimap<std::string, GameEngineTextureSetter>::iterator NameEndIter = TextureSetters.upper_bound(UpperName);
+
+	for (; NameStartIter != NameEndIter; ++NameStartIter)
+	{
+		Result.push_back(&NameStartIter->second);
+	}
+
+	return Result;
+
+}
+
+void GameEngineShaderResHelper::AllResourcesReset()
+{
+	{
+		std::multimap<std::string, GameEngineTextureSetter>::iterator StartIter = TextureSetters.begin();
+		std::multimap<std::string, GameEngineTextureSetter>::iterator EndIter = TextureSetters.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			GameEngineTextureSetter& Setter = StartIter->second;
+			Setter.Reset();
+		}
+	}
 }

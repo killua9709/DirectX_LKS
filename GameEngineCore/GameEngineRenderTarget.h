@@ -1,9 +1,29 @@
 #pragma once
-#include "GameEngineTexture.h"
+#include "GameEngineRenderer.h"
+#include "GameEngineCore.h"
+
+
+
+class GameEngineRenderTarget;
+class GameEnginePostProcess
+	: std::enable_shared_from_this<GameEnginePostProcess>
+{
+	friend GameEngineRenderTarget;
+
+public:
+	std::shared_ptr<GameEngineRenderTarget> ResultTarget;
+
+protected:
+	virtual void Start(GameEngineRenderTarget* _Target) = 0;
+	virtual void Effect(GameEngineRenderTarget* _Target, float _DeltaTime) = 0;
+};
 
 // 설명 :
-class GameEngineRenderTarget : public GameEngineResource<GameEngineRenderTarget>
+class GameEngineTexture;
+class GameEngineRenderTarget : public GameEngineResource<GameEngineRenderTarget>,
+	std::enable_shared_from_this<GameEngineRenderTarget>
 {
+	friend class GameEngineCore;
 public:
 	// constrcuter destructer
 	GameEngineRenderTarget();
@@ -24,22 +44,65 @@ public:
 		return NewRenderTarget;
 	}
 
+	static std::shared_ptr<GameEngineRenderTarget> Create(DXGI_FORMAT _Format, float4 _Scale, float4 _Color)
+	{
+		std::shared_ptr<GameEngineRenderTarget> NewRenderTarget = GameEngineResource::CreateUnNamed();
+
+		NewRenderTarget->ResCreate(_Format, _Scale, _Color);
+
+		return NewRenderTarget;
+	}
+
 	void Clear();
 
 	void Setting() override;
 
-	void CreateDepthTexture();
+	void Reset();
+
+	void CreateDepthTexture(int _Index = 0);
+
+	void Merge(std::shared_ptr<GameEngineRenderTarget> _Other, size_t _Index = 0);
+
+	// 랜더타겟에다가 effect를 준다는 개념이 됩니다.
+
+	void EffectInit(std::shared_ptr<GameEnginePostProcess> _PostProcess);
+
+	template<typename EffectType>
+	std::shared_ptr<EffectType> CreateEffect()
+	{
+		std::shared_ptr<EffectType> Effect = std::make_shared<EffectType>();
+
+		EffectInit(Effect);
+
+		// std::shared_ptr<GameEnginePostProcess> UpCast = std::dynamic_pointer_cast<GameEnginePostProcess>(Effect);
+		Effects.push_back(Effect);
+		return Effect;
+	}
+
+	void Effect(float _DeltaTime);
+
+	std::shared_ptr<GameEngineTexture> GetTexture(int _Index)
+	{
+		return Textures[_Index];
+	}
 
 protected:
 
 private:
+	static void RenderTargetUnitInit();
+	static GameEngineRenderUnit MergeUnit;
+
 	float4 Color = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-	std::shared_ptr<GameEngineTexture> Texture;
+	std::vector<std::shared_ptr<GameEnginePostProcess>> Effects;
+
+	std::vector<std::shared_ptr<GameEngineTexture>> Textures;
+	std::vector<ID3D11RenderTargetView*> RTVs;
 
 	std::shared_ptr<GameEngineTexture> DepthTexture;
 
 	void ResCreate(std::shared_ptr<GameEngineTexture> _Texture, float4 _Color);
 
-};
+	void ResCreate(DXGI_FORMAT _Format, float4 _Scale, float4 _Color);
 
+};

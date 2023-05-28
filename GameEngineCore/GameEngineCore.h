@@ -18,6 +18,9 @@
 // Ό³Έν :
 class GameEngineCore
 {
+	friend class GameEngineTexture;
+	friend class GameEngineSprite;
+
 public:
 	// constrcuter destructer
 	GameEngineCore();
@@ -60,9 +63,17 @@ public:
 	}
 	static void ChangeLevel(const std::string_view& _Name);
 
+	static std::shared_ptr<GameEngineLevel> GetCurLevel() 
+	{
+		return MainLevel;
+	}
+
+
 protected:
 
 private:
+	static class GameEngineLevel* CurLoadLevel;
+
 	static void CoreResourcesInit();
 	static void CoreResourcesEnd();
 

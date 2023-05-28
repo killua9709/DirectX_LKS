@@ -67,7 +67,7 @@ void GameEngineCore::CoreResourcesInit()
 		D3D11_SAMPLER_DESC SamperData = {};
 
 		// 
-
+		SamperData.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 		SamperData.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 		SamperData.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 		SamperData.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -85,6 +85,7 @@ void GameEngineCore::CoreResourcesInit()
 	{
 		D3D11_SAMPLER_DESC SamperData = {};
 
+		SamperData.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 		SamperData.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 		SamperData.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 		SamperData.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -119,6 +120,26 @@ void GameEngineCore::CoreResourcesInit()
 	}
 
 	{
+		std::vector<GameEngineVertex> ArrVertex;
+		ArrVertex.resize(4);
+
+		// 0   1
+		// 3   2
+		// 앞면
+		ArrVertex[0] = { { -1.0f, 1.0f, 0.0f }, {0.0f, 0.0f} };
+		ArrVertex[1] = { { 1.0f, 1.0f, 0.0f }, {1.0f, 0.0f} };
+		ArrVertex[2] = { { 1.0f, -1.0f, 0.0f }, {1.0f, 1.0f} };
+		ArrVertex[3] = { { -1.0f, -1.0f, 0.0f }, {0.0f, 1.0f} };
+
+		std::vector<UINT> ArrIndex = { 0, 1, 2, 0, 2, 3 };
+
+		GameEngineVertexBuffer::Create("FullRect", ArrVertex);
+		GameEngineIndexBuffer::Create("FullRect", ArrIndex);
+
+	}
+
+
+	{
 		// 블랜드
 		D3D11_BLEND_DESC Desc = { 0, };
 
@@ -140,8 +161,8 @@ void GameEngineCore::CoreResourcesInit()
 		Desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 
 		Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-		Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
-		Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+		Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+		Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
 
 		GameEngineBlend::Create("AlphaBlend", Desc);
 	}
@@ -166,6 +187,17 @@ void GameEngineCore::CoreResourcesInit()
 
 		GameEngineDepthState::Create("EngineDepth", Desc);
 	}
+
+	{
+		D3D11_DEPTH_STENCIL_DESC Desc = { 0, };
+		Desc.DepthEnable = true;
+		Desc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_ALWAYS;
+		Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
+		Desc.StencilEnable = false;
+
+		GameEngineDepthState::Create("AlwayDepth", Desc);
+	}
+
 
 
 	{
@@ -208,7 +240,7 @@ void GameEngineCore::CoreResourcesInit()
 
 	}
 
-	// 버텍스 쉐이더 컴파일
+	// 쉐이더 컴파일
 	{
 		GameEngineDirectory NewDir;
 		NewDir.MoveParentToDirectory("EngineResources");
@@ -217,15 +249,18 @@ void GameEngineCore::CoreResourcesInit()
 
 		std::vector<GameEngineFile> Files = NewDir.GetAllFile({ ".hlsl", ".fx" });
 
-		std::shared_ptr<GameEngineVertexShader> VertexShader = GameEngineVertexShader::Load(Files[0].GetFullPath(), "Texture_VS");
+		// std::string FileString = Files[0].GetString();
 
+		for (size_t i = 0; i < Files.size(); i++)
+		{
+			GameEngineShader::AutoCompile(Files[i]);
+		}
 
-		GameEnginePixelShader::Load(Files[0].GetFullPath(), "Texture_PS");
+		//GameEngineVertexShader::Load(Files[0].GetFullPath(), "Merge_VS");
+		//GameEnginePixelShader::Load(Files[0].GetFullPath(), "Merge_PS");
 
-		//for (size_t i = 0; i < Files.size(); i++)
-		//{
-		//}
-
+		//GameEngineVertexShader::Load(Files[1].GetFullPath(), "Texture_VS");
+		//GameEnginePixelShader::Load(Files[1].GetFullPath(), "Texture_PS");
 	}
 
 
@@ -285,6 +320,20 @@ void GameEngineCore::CoreResourcesInit()
 			Pipe->SetBlendState("AlphaBlend");
 			Pipe->SetDepthState("EngineDepth");
 		}
+
+		{
+			std::shared_ptr<GameEngineRenderingPipeLine> Pipe = GameEngineRenderingPipeLine::Create("Merge");
+			Pipe->SetVertexBuffer("FullRect");
+			Pipe->SetIndexBuffer("FullRect");
+			Pipe->SetVertexShader("MergeShader.hlsl");
+			Pipe->SetRasterizer("Engine2DBase");
+			Pipe->SetPixelShader("MergeShader.hlsl");
+			Pipe->SetBlendState("AlphaBlend");
+			Pipe->SetDepthState("AlwayDepth");
+
+			GameEngineRenderTarget::RenderTargetUnitInit();
+		}
+
 	}
 }
 

@@ -8,10 +8,13 @@
 #include <GameEngineBase\GameEngineTime.h>
 #include "GameEngineDevice.h"
 #include "GameEngineVideo.h"
+#include "GameEngineGUI.h"
 
 std::map<std::string, std::shared_ptr<GameEngineLevel>> GameEngineCore::LevelMap;
 std::shared_ptr<GameEngineLevel> GameEngineCore::MainLevel = nullptr;
 std::shared_ptr<GameEngineLevel> GameEngineCore::NextLevel = nullptr;
+
+GameEngineLevel* GameEngineCore::CurLoadLevel = nullptr;
 
 GameEngineCore::GameEngineCore() 
 {
@@ -26,9 +29,17 @@ void GameEngineCore::EngineStart(std::function<void()> _ContentsStart)
 	// 코어이니셜라이즈
 	// Rect Box
 
+	if (false == GameEngineInput::IsKey("GUISwitch"))
+	{
+		GameEngineInput::CreateKey("GUISwitch", VK_F8);
+	}
+	
+
 	GameEngineDevice::Initialize();
 
 	CoreResourcesInit();
+
+	GameEngineGUI::Initialize();
 
 	if (nullptr == _ContentsStart)
 	{
@@ -41,18 +52,40 @@ void GameEngineCore::EngineUpdate()
 {
 	if (nullptr != NextLevel)
 	{
+		std::shared_ptr<GameEngineLevel> PrevLevel = MainLevel;
+
 		if (nullptr != MainLevel)
 		{
+			CurLoadLevel = MainLevel.get();
 			MainLevel->LevelChangeEnd();
+			CurLoadLevel = nullptr;
+			MainLevel->ActorLevelChangeEnd();
 		}
 
 		MainLevel = NextLevel;
 
 		if (nullptr != MainLevel)
 		{
+			CurLoadLevel = MainLevel.get();
 			MainLevel->LevelChangeStart();
+			CurLoadLevel = nullptr;
+			MainLevel->ActorLevelChangeStart();
 		}
 
+		// PrevLevel
+		// 레벨체인지가 완료된 시점에서 Texture의 상태를 한번 생각해봅시다.
+
+		// 1은 가지고 있다.
+		// GameEngineResources<GameEngineTexture>가 1개의 레퍼런스 카운트를 가지고 있을 것이다.
+
+		// 이전레벨에 존재하는 TextureSetter내부에 보관되고 있는 애들은 2이상의 가지고 있을 것이다.
+
+		// 3이상인 애들은 => 이전레벨과 지금레벨에서 모두 사용하는 
+		// 애들 TextureResources에서도 들고 있을것이기 때문에 레퍼런스 카운트가 3이상이다.
+		// 2인애들은 이전레벨에서만 사용하거나 지금레벨에서만 사용애들입니다.
+		// 레퍼런스 카운트 관리해볼것이다.
+
+		// Prev레벨에서 사용한 텍스처들
 		NextLevel = nullptr;
 		GameEngineTime::GlobalTime.Reset();
 	}
@@ -74,9 +107,14 @@ void GameEngineCore::EngineUpdate()
 	GameEngineInput::Update(TimeDeltaTime);
 	GameEngineSound::SoundUpdate();
 
+	// 업데이트가 일어나는 동안 로드가 된애들
+
+	CurLoadLevel = MainLevel.get();
 	MainLevel->TimeEvent.Update(TimeDeltaTime);
+	MainLevel->AccLiveTime(TimeDeltaTime);
 	MainLevel->Update(TimeDeltaTime);
 	MainLevel->ActorUpdate(TimeDeltaTime);
+	CurLoadLevel = nullptr;
 
 	GameEngineVideo::VideoState State = GameEngineVideo::GetCurState();
 	if (State != GameEngineVideo::VideoState::Running)
@@ -87,6 +125,7 @@ void GameEngineCore::EngineUpdate()
 		GameEngineDevice::RenderEnd();
 	}
 
+	MainLevel->ActorRelease();
 }
 
 void GameEngineCore::EngineEnd(std::function<void()> _ContentsEnd)
@@ -98,9 +137,14 @@ void GameEngineCore::EngineEnd(std::function<void()> _ContentsEnd)
 
 	_ContentsEnd();
 
+	GameEngineGUI::Release();
+
 	LevelMap.clear();
 	CoreResourcesEnd();
+
+
 	GameEngineDevice::Release();
+	GameEngineWindow::Release();
 }
 
 void GameEngineCore::Start(HINSTANCE _instance,  std::function<void()> _Start, std::function<void()> _End, float4 _Pos, float4 _Size)
@@ -132,6 +176,9 @@ void GameEngineCore::ChangeLevel(const std::string_view& _Name)
 
 void GameEngineCore::LevelInit(std::shared_ptr<GameEngineLevel> _Level) 
 {
+	CurLoadLevel = _Level.get();
+	_Level->Level = _Level.get();
 	_Level->Start();
+	CurLoadLevel = nullptr;
 }
 

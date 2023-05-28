@@ -13,6 +13,7 @@ public:
 
 public:
 	virtual void Setting() = 0;
+	virtual void Reset() {};
 };
 
 class GameEngineConstantBufferSetter : public GameEngineShaderResources
@@ -30,6 +31,7 @@ class GameEngineTextureSetter : public GameEngineShaderResources
 public:
 	std::shared_ptr<GameEngineTexture> Res;
 	void Setting() override;
+	void Reset() override;
 };
 
 class GameEngineSamplerSetter : public GameEngineShaderResources
@@ -47,6 +49,10 @@ private:
 	std::multimap<std::string, GameEngineSamplerSetter> SamplerSetters;
 
 public:
+	GameEngineTextureSetter* GetTextureSetter(const std::string_view& _View);
+
+	std::vector<GameEngineTextureSetter*> GetTextureSetters(const std::string_view& _View);
+
 	void CreateTextureSetter(const GameEngineTextureSetter& _Setter)
 	{
 		TextureSetters.insert(std::make_pair(_Setter.Name, _Setter));
@@ -88,7 +94,11 @@ public:
 
 	void SetTexture(const std::string_view& _SettingName, const std::string_view& _ImageName);
 
+	void SetTexture(const std::string_view& _SettingName, std::shared_ptr<GameEngineTexture> _Texture);
+
 	void Copy(const GameEngineShaderResHelper& _ResHelper);
 
 	void Setting();
+
+	void AllResourcesReset();
 };
