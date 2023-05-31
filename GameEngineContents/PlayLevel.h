@@ -15,8 +15,6 @@ public:
 	PlayLevel& operator=(const PlayLevel& _Other) = delete;
 	PlayLevel& operator=(PlayLevel&& _Other) noexcept = delete;
 
-	std::shared_ptr<class GameEngineVideo> Video;
-	std::shared_ptr<class TestObject> Object3;
 
 	std::shared_ptr<class FadeEffect> FEffect;
 
@@ -30,6 +28,10 @@ protected:
 
 private:
 	void PlayerCreate();
+	std::shared_ptr<class Player> Object0 = nullptr;
+	std::shared_ptr<class TestObject> Object1 = nullptr;
+	std::shared_ptr<class TestObject> Object3;
+	std::shared_ptr<class GameEngineSpriteRenderer> RenderTest = nullptr;
 
 
 };

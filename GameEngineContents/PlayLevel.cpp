@@ -14,67 +14,12 @@
 #include <GameEngineCore/GameEngineTexture.h>
 #include <GameEngineCore/GameEngineSprite.h>
 
-std::shared_ptr<Player> Object0 = nullptr;
-std::shared_ptr<TestObject> Object1 = nullptr;
-std::shared_ptr<GameEngineSpriteRenderer> RenderTest = nullptr;
-
 PlayLevel::PlayLevel() 
 {
 }
 
 PlayLevel::~PlayLevel() 
 {
-}
-
-void PlayLevel::Update(float _DeltaTime)
-{
-	if (Object3->Render->GetTransform()->Collision({ Object1->Render->GetTransform(), ColType::OBBBOX3D, ColType::OBBBOX3D }))
-	{
-		int a = 0;
-	}
-
-	if (true == GameEngineInput::IsDown("LevelChangeKey"))
-	{
-		GameEngineCore::ChangeLevel("TitleLevel");
-	}
-
-	if (true == GameEngineInput::IsPress("FadeIn"))
-	{
-		std::shared_ptr<GameEngineCamera> Camera = GetLevel()->GetCamera(0);
-
-		Camera->AddZoomRatio(-_DeltaTime);
-
-		// FEffect->FadeIn();
-	}
-
-	if (true == GameEngineInput::IsPress("FadeOut"))
-	{
-		std::shared_ptr<GameEngineCamera> Camera = GetLevel()->GetCamera(0);
-		Camera->AddZoomRatio(_DeltaTime);
-		// FEffect->FadeOut();
-	}
-
-
-
-	//if (nullptr != Object1 && 1.0f <= Object1->GetLiveTime())
-	//{
-	//	if (nullptr == Object1)
-	//	{
-	//		return;
-	//	}
-	//	// RenderTest->Death();
-	//	Object1->Death();
-	//	Object1 = nullptr;
-	//}
-}
-
-void PlayLevel::PlayerCreate(/*Playlevel* this*/)
-{
-	if (nullptr != Object1) 
-	{
-		RenderTest->GetTransform()->SetParent(Object3->GetTransform());
-	}
-
 }
 
 void PlayLevel::Start()
@@ -107,8 +52,6 @@ void PlayLevel::Start()
 
 		
 	}
-
-
 
 	GetMainCamera()->SetSortType(0, SortType::ZSort);
 	GetMainCamera()->SetProjectionType(CameraType::Orthogonal);
@@ -172,6 +115,49 @@ void PlayLevel::Start()
 
 
 }
+
+void PlayLevel::Update(float _DeltaTime)
+{
+	if (Object3->Render->GetTransform()->Collision({ Object1->Render->GetTransform(), ColType::OBBBOX3D, ColType::OBBBOX3D }))
+	{
+		int a = 0;
+	}
+
+	if (true == GameEngineInput::IsDown("LevelChangeKey"))
+	{
+		GameEngineCore::ChangeLevel("TitleLevel");
+	}
+
+	if (true == GameEngineInput::IsPress("FadeIn"))
+	{
+		std::shared_ptr<GameEngineCamera> Camera = GetLevel()->GetCamera(0);
+
+		//Camera->AddZoomRatio(-_DeltaTime);
+
+		 FEffect->FadeIn();
+	}
+
+	if (true == GameEngineInput::IsPress("FadeOut"))
+	{
+		/*std::shared_ptr<GameEngineCamera> Camera = GetLevel()->GetCamera(0);
+		Camera->AddZoomRatio(_DeltaTime);*/
+		 FEffect->FadeOut();
+	}
+
+
+
+	//if (nullptr != Object1 && 1.0f <= Object1->GetLiveTime())
+	//{
+	//	if (nullptr == Object1)
+	//	{
+	//		return;
+	//	}
+	//	// RenderTest->Death();
+	//	Object1->Death();
+	//	Object1 = nullptr;
+	//}
+}
+
 void PlayLevel::LevelChangeStart()
 {
 	GameEngineLevel::LevelChangeStart();
@@ -182,4 +168,13 @@ void PlayLevel::LevelChangeEnd()
 {
 	GameEngineLevel::LevelChangeEnd();
 	int a = 0;
+}
+
+void PlayLevel::PlayerCreate(/*Playlevel* this*/)
+{
+	if (nullptr != Object1)
+	{
+		RenderTest->GetTransform()->SetParent(Object3->GetTransform());
+	}
+
 }

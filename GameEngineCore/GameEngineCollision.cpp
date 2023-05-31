@@ -2,17 +2,20 @@
 #include "GameEngineCollision.h"
 #include "GameEngineLevel.h"
 
-GameEngineCollision::GameEngineCollision() 
+GameEngineRenderUnit GameEngineCollision::DebugUnit;
+
+GameEngineCollision::GameEngineCollision()
 {
 }
 
-GameEngineCollision::~GameEngineCollision() 
+GameEngineCollision::~GameEngineCollision()
 {
 }
 
 
-void GameEngineCollision::Start() 
+void GameEngineCollision::Start()
 {
+	SetDebugCamera(GetLevel()->GetCamera(0).get());
 }
 
 std::shared_ptr<GameEngineCollision> GameEngineCollision::Collision(int _TargetGroup, ColType _ThisColType, ColType _OtherColtype)
@@ -50,7 +53,7 @@ std::shared_ptr<GameEngineCollision> GameEngineCollision::Collision(int _TargetG
 	return nullptr;
 }
 
-void GameEngineCollision::SetOrder(int _Order) 
+void GameEngineCollision::SetOrder(int _Order)
 {
 	std::shared_ptr<GameEngineCollision> ConThis = DynamicThis<GameEngineCollision>();
 
@@ -106,3 +109,16 @@ bool GameEngineCollision::CollisionAll(int _TargetGroup, std::vector<std::shared
 	return _Col.size() != 0;
 
 }
+
+//#ifdef _DEBUG
+#include "GameEngineCamera.h"
+
+void GameEngineCollision::DebugRender(float _DeltaTime)
+{
+
+	DebugUnit.Render(_DeltaTime);
+	// DebugUnit.SetPipeLine()
+	// 
+}
+
+//#endif

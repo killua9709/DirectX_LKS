@@ -22,6 +22,9 @@
     <ClInclude Include="FadeEffect.h">
       <Filter>PostEffect</Filter>
     </ClInclude>
+    <ClInclude Include="TutoLevel.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp" />
@@ -49,6 +52,9 @@
       <Filter>PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="Contents_Resources.cpp" />
+    <ClCompile Include="TutoLevel.cpp">
+      <Filter>Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Levels">

@@ -2,18 +2,18 @@
 #include <GameEngineCore\GameEngineLevel.h>
 
 // Ό³Έν :
-class TitleLevel : public GameEngineLevel
+class TutoLevel : public GameEngineLevel
 {
 public:
 	// constrcuter destructer
-	TitleLevel();
-	~TitleLevel();
+	TutoLevel();
+	~TutoLevel();
 
 	// delete Function
-	TitleLevel(const TitleLevel& _Other) = delete;
-	TitleLevel(TitleLevel&& _Other) noexcept = delete;
-	TitleLevel& operator=(const TitleLevel& _Other) = delete;
-	TitleLevel& operator=(TitleLevel&& _Other) noexcept = delete;
+	TutoLevel(const TutoLevel& _Other) = delete;
+	TutoLevel(TutoLevel&& _Other) noexcept = delete;
+	TutoLevel& operator=(const TutoLevel& _Other) = delete;
+	TutoLevel& operator=(TutoLevel&& _Other) noexcept = delete;
 
 	std::shared_ptr<class FadeEffect> FEffect;
 

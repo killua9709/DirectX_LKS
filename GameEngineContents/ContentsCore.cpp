@@ -3,6 +3,7 @@
 #include <GameEngineCore\GameEngineCore.h>
 #include "PlayLevel.h"
 #include "TitleLevel.h"
+#include "TutoLevel.h"
 #include <GameEngineCore/GameEngineCoreWindow.h>
 
 
@@ -28,6 +29,7 @@ void ContentsCore::GameStart()
 	ContentsResourcesCreate();
 
 	GameEngineCore::CreateLevel<TitleLevel>();
+	GameEngineCore::CreateLevel<TutoLevel>();
 	GameEngineCore::CreateLevel<PlayLevel>();
 	GameEngineCore::ChangeLevel("TitleLevel");
 }

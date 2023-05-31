@@ -20,6 +20,11 @@ class GameEngineLevel : public GameEngineObject
 	friend class GameEngineTexture;
 
 public:
+	static void IsDebugSwitch()
+	{
+		IsDebugRender = !IsDebugRender;
+	}
+
 	GameEngineTimeEvent TimeEvent;
 
 	// constrcuter destructer
@@ -64,7 +69,7 @@ public:
 		return std::dynamic_pointer_cast<ActorType>(NewActor);
 	}
 
-	std::shared_ptr<class GameEngineCamera> GetMainCamera() 
+	std::shared_ptr<class GameEngineCamera> GetMainCamera()
 	{
 		return MainCamera;
 	}
@@ -76,10 +81,12 @@ public:
 
 	std::shared_ptr<GameEngineCamera> GetCamera(int _CameraOrder);
 
-	std::shared_ptr<GameEngineRenderTarget> GetLastTarget() 
+	std::shared_ptr<GameEngineRenderTarget> GetLastTarget()
 	{
 		return LastTarget;
 	}
+
+	void CollisionDebugRender(GameEngineCamera* _Camera, float _Delta);
 
 protected:
 	// 레벨이 바뀌어서 시작할때
@@ -91,6 +98,8 @@ protected:
 	void Render(float _DeltaTime);
 
 private:
+	static bool IsDebugRender;
+
 	// 모든 카메라의 내용이 다 종합된.
 	std::shared_ptr<GameEngineRenderTarget> LastTarget;
 
@@ -127,4 +136,3 @@ private:
 
 };
 
- 

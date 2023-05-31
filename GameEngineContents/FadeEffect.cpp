@@ -19,16 +19,6 @@ void FadeEffect::Start(GameEngineRenderTarget* _Target)
 	ResultTarget = GameEngineRenderTarget::Create(DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT, GameEngineWindow::GetScreenSize(), float4::Null);
 }
 
-void FadeIn() 
-{
-
-}
-
-void FadeOut() 
-{
-
-}
-
 void FadeEffect::Effect(GameEngineRenderTarget* _Target, float _DeltaTime)
 {
 	if (State == FadeState::None)
@@ -58,6 +48,4 @@ void FadeEffect::Effect(GameEngineRenderTarget* _Target, float _DeltaTime)
 
 	_Target->Clear();
 	_Target->Merge(ResultTarget);
-
-	int a = 0;
 }
