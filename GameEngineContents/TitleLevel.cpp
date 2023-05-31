@@ -145,9 +145,9 @@ void TitleLevel::Update(float _DeltaTime)
 
 	if (LogoTime > 8.0f && First == false)
 	{
-		Logo->Render->SetTexture("Logo3.png");
-		Logo->GetTransform()->SetLocalPosition({ -4.0f, 215.0f, -10.0f });
-		Logo->GetTransform()->SetWorldScale({ 1274, 521 });
+		Logo->Render->SetTexture("Logo4.png");
+		Logo->GetTransform()->SetLocalPosition({ 0.0f, 215.0f, -10.0f });
+		Logo->GetTransform()->SetWorldScale({ 905, 332 });
 		Logo2->Render->On();
 		FEffect->FadeOut();
 		First = true;
