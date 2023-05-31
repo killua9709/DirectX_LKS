@@ -25,6 +25,9 @@
     <ClInclude Include="TutoLevel.h">
       <Filter>Levels</Filter>
     </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentsCore.cpp" />
@@ -54,6 +57,9 @@
     <ClCompile Include="Contents_Resources.cpp" />
     <ClCompile Include="TutoLevel.cpp">
       <Filter>Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

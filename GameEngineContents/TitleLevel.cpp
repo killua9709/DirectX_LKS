@@ -72,6 +72,29 @@ void TitleLevel::Start()
 	BackGround->GetTransform()->SetWorldScale({ 1920, 1080 });
 	BackGround->Render->Off();
 
+	Button1 = CreateActor<TestObject>();
+	Button1->Render->SetTexture("Titlebackground.png");
+	Button1->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, -5.0f });
+	Button1->GetTransform()->SetWorldScale({ 1920, 1080 });
+	Button1->Render->Off();
+
+	Button2 = CreateActor<TestObject>();
+	Button2->Render->SetTexture("Titlebackground.png");
+	Button2->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, -5.0f });
+	Button2->GetTransform()->SetWorldScale({ 1920, 1080 });
+	Button2->Render->Off();
+
+	Button3 = CreateActor<TestObject>();
+	Button3->Render->SetTexture("Titlebackground.png");
+	Button3->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, -5.0f });
+	Button3->GetTransform()->SetWorldScale({ 1920, 1080 });
+	Button3->Render->Off();
+
+	Button4 = CreateActor<TestObject>();
+	Button4->Render->SetTexture("Titlebackground.png");
+	Button4->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, -5.0f });
+	Button4->GetTransform()->SetWorldScale({ 1920, 1080 });
+	Button4->Render->Off();
 }
 
 void TitleLevel::Update(float _DeltaTime)
@@ -122,7 +145,7 @@ void TitleLevel::Update(float _DeltaTime)
 
 	if (LogoTime > 8.0f && First == false)
 	{
-		Logo->Render->SetTexture("Logo.png");
+		Logo->Render->SetTexture("Logo3.png");
 		Logo->GetTransform()->SetLocalPosition({ -4.0f, 215.0f, -10.0f });
 		Logo->GetTransform()->SetWorldScale({ 1274, 521 });
 		Logo2->Render->On();
