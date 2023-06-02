@@ -21,7 +21,7 @@ TutoLevel::~TutoLevel()
 void TutoLevel::Start()
 {
 
-	if (false == GameEngineInput::IsKey("LevelChangeKey"))
+	/*if (false == GameEngineInput::IsKey("LevelChangeKey"))
 	{
 		GameEngineInput::CreateKey("LevelChangeKey", 'I');
 	}
@@ -40,7 +40,7 @@ void TutoLevel::Start()
 		{
 			GameEngineTexture::Load(File[i].GetFullPath());
 		}
-	}
+	}*/
 
 	FEffect = GetLastTarget()->CreateEffect<FadeEffect>();
 

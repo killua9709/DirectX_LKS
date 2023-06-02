@@ -36,7 +36,7 @@ void PlayLevel::Start()
 	}
 
 	{
-		GameEngineDirectory NewDir;
+		/*GameEngineDirectory NewDir;
 		NewDir.MoveParentToDirectory("ContentResources");
 		NewDir.Move("ContentResources");
 		NewDir.Move("Texture");
@@ -48,7 +48,7 @@ void PlayLevel::Start()
 		for (size_t i = 0; i < File.size(); i++)
 		{
 			GameEngineTexture::Load(File[i].GetFullPath());
-		}
+		}*/
 
 		
 	}
