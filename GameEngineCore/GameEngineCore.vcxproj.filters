@@ -148,6 +148,9 @@
     <ClInclude Include="GameEngineFSM.h">
       <Filter>Content</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngineDebug3D.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineCore.cpp" />
@@ -293,6 +296,9 @@
     <ClCompile Include="GameEngineFSM.cpp">
       <Filter>Content</Filter>
     </ClCompile>
+    <ClCompile Include="GameEngineDebug3D.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Object">
@@ -366,6 +372,9 @@
     </Filter>
     <Filter Include="Content">
       <UniqueIdentifier>{aa012691-fd23-4cf9-8633-74d78a371e22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{8971f234-118f-4d29-8925-3ace846e8eab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

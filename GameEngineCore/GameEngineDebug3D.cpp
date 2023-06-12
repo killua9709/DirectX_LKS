@@ -82,5 +82,7 @@ namespace GameEngineDebug
 
 			DebugRenderUnit.Render(_Delta);
 		}
+
+		Data.clear();
 	}
 }
