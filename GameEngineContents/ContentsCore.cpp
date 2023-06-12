@@ -21,8 +21,6 @@ void ContentsCore::GameStart()
 {
 
 
-	new int();
-
 	GameEngineGUI::GUIWindowCreate<GameEngineCoreWindow>("CoreWindow");
 
 

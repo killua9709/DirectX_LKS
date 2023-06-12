@@ -139,11 +139,14 @@
     <ClInclude Include="GameEngineTileMapRenderer.h">
       <Filter>Object\Rendering\Component\2D</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngineFSM.h">
-      <Filter>ContentPattern</Filter>
-    </ClInclude>
     <ClInclude Include="GameEngineUIRenderer.h">
       <Filter>Object\Rendering\Component\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineButton.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineFSM.h">
+      <Filter>Content</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -281,11 +284,14 @@
     <ClCompile Include="GameEngineTileMapRenderer.cpp">
       <Filter>Object\Rendering\Component\2D</Filter>
     </ClCompile>
-    <ClCompile Include="GameEngineFSM.cpp">
-      <Filter>ContentPattern</Filter>
-    </ClCompile>
     <ClCompile Include="GameEngineUIRenderer.cpp">
       <Filter>Object\Rendering\Component\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineButton.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineFSM.cpp">
+      <Filter>Content</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -358,8 +364,8 @@
     <Filter Include="UI\SubWindow">
       <UniqueIdentifier>{652ba404-c390-4c5a-b3af-a2c8b2f3336d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ContentPattern">
-      <UniqueIdentifier>{0ea0f19a-ed9f-42de-afea-08993b589204}</UniqueIdentifier>
+    <Filter Include="Content">
+      <UniqueIdentifier>{aa012691-fd23-4cf9-8633-74d78a371e22}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

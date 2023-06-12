@@ -100,7 +100,7 @@ void GameEngineCamera::Update(float _DeltaTime)
 
 		if (true == GameEngineInput::IsPress("CamMoveLeft"))
 		{
-			GetTransform()->AddLocalPosition(GetTransform()->GetWorldLeftVector()* Speed * _DeltaTime);
+			GetTransform()->AddLocalPosition(GetTransform()->GetWorldLeftVector() * Speed * _DeltaTime);
 		}
 		if (true == GameEngineInput::IsPress("CamMoveRight"))
 		{
@@ -152,7 +152,7 @@ void GameEngineCamera::Render(float _DeltaTime)
 	std::map<int, std::list<std::shared_ptr<GameEngineRenderer>>>::iterator RenderGroupStartIter = Renderers.begin();
 	std::map<int, std::list<std::shared_ptr<GameEngineRenderer>>>::iterator RenderGroupEndIter = Renderers.end();
 
-	for (;RenderGroupStartIter != RenderGroupEndIter; ++RenderGroupStartIter)
+	for (; RenderGroupStartIter != RenderGroupEndIter; ++RenderGroupStartIter)
 	{
 		std::list<std::shared_ptr<GameEngineRenderer>>& RenderGroup = RenderGroupStartIter->second;
 
@@ -181,6 +181,8 @@ void GameEngineCamera::Render(float _DeltaTime)
 		std::list<std::shared_ptr<GameEngineRenderer>>::iterator StartRenderer = RenderGroup.begin();
 		std::list<std::shared_ptr<GameEngineRenderer>>::iterator EndRenderer = RenderGroup.end();
 
+		float ScaleTime = _DeltaTime * GameEngineTime::GlobalTime.GetRenderOrderTimeScale(RenderGroupStartIter->first);
+
 		for (; StartRenderer != EndRenderer; ++StartRenderer)
 		{
 			std::shared_ptr<GameEngineRenderer>& Render = *StartRenderer;
@@ -196,7 +198,7 @@ void GameEngineCamera::Render(float _DeltaTime)
 			}
 
 			Render->RenderTransformUpdate(this);
-			Render->Render(_DeltaTime);
+			Render->Render(ScaleTime);
 
 		}
 	}

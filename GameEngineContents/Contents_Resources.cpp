@@ -29,8 +29,8 @@ void ContentsCore::ContentsResourcesCreate()
 	{
 		std::shared_ptr<GameEngineRenderingPipeLine> Pipe = GameEngineRenderingPipeLine::Create("My2DTexture");
 
-		Pipe->SetVertexBuffer("Rect");
-		Pipe->SetIndexBuffer("Rect");
+		//Pipe->SetVertexBuffer("Rect");
+		//Pipe->SetIndexBuffer("Rect");
 		Pipe->SetVertexShader("MyShader.fx");
 		Pipe->SetRasterizer("Engine2DBase");
 		Pipe->SetPixelShader("MyShader.fx");
@@ -42,8 +42,8 @@ void ContentsCore::ContentsResourcesCreate()
 	{
 		std::shared_ptr<GameEngineRenderingPipeLine> Pipe = GameEngineRenderingPipeLine::Create("Fade");
 
-		Pipe->SetVertexBuffer("FullRect");
-		Pipe->SetIndexBuffer("FullRect");
+		//Pipe->SetVertexBuffer("FullRect");
+		//Pipe->SetIndexBuffer("FullRect");
 		Pipe->SetVertexShader("FadeShader.hlsl");
 		Pipe->SetRasterizer("Engine2DBase");
 		Pipe->SetPixelShader("FadeShader.hlsl");
@@ -53,11 +53,11 @@ void ContentsCore::ContentsResourcesCreate()
 
 	{
 		std::shared_ptr<GameEngineRenderingPipeLine> Pipe = GameEngineRenderingPipeLine::Create("DebugRect");
-		Pipe->SetVertexBuffer("Rect");
-		Pipe->SetIndexBuffer("Rect");
-		Pipe->SetVertexShader("CollisionDebugShader.hlsl");
+		//Pipe->SetVertexBuffer("Rect");
+		//Pipe->SetIndexBuffer("Rect");
+		Pipe->SetVertexShader("DebugMeshRender.hlsl");
 		Pipe->SetRasterizer("Engine2DBase");
-		Pipe->SetPixelShader("CollisionDebugShader.hlsl");
+		Pipe->SetPixelShader("DebugMeshRender.hlsl");
 		Pipe->SetBlendState("AlphaBlend");
 		Pipe->SetDepthState("EngineDepth");
 	}

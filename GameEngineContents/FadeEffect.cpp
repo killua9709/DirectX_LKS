@@ -1,22 +1,33 @@
 #include "PrecompileHeader.h"
 #include "FadeEffect.h"
 
-FadeEffect::FadeEffect() 
+FadeEffect::FadeEffect()
 {
 }
 
-FadeEffect::~FadeEffect() 
+FadeEffect::~FadeEffect()
 {
 }
 
 void FadeEffect::Start(GameEngineRenderTarget* _Target)
 {
 	FadeUnit = std::make_shared<GameEngineRenderUnit>();
+	FadeUnit->SetMesh("FullRect");
 	FadeUnit->SetPipeLine("Fade");
 
 	FadeUnit->ShaderResHelper.SetConstantBufferLink("FADEDATA", FadeData);
 	// 
 	ResultTarget = GameEngineRenderTarget::Create(DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT, GameEngineWindow::GetScreenSize(), float4::Null);
+}
+
+void FadeIn()
+{
+
+}
+
+void FadeOut()
+{
+
 }
 
 void FadeEffect::Effect(GameEngineRenderTarget* _Target, float _DeltaTime)
@@ -48,4 +59,6 @@ void FadeEffect::Effect(GameEngineRenderTarget* _Target, float _DeltaTime)
 
 	_Target->Clear();
 	_Target->Merge(ResultTarget);
+
+	int a = 0;
 }

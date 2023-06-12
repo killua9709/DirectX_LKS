@@ -6,6 +6,8 @@
 class Player : public GameEngineActor
 {
 public:
+	static Player* MainPlayer;
+public:
 	// constrcuter destructer
 	Player();
 	~Player();
@@ -17,6 +19,8 @@ public:
 	Player& operator=(Player&& _Other) noexcept = delete;
 
 	std::shared_ptr<class GameEngineSpriteRenderer> MainRenderer;
+
+	void TestCallBack();
 
 protected:
 	void Start();

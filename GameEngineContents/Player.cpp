@@ -12,8 +12,11 @@
 #include "TestObject.h"
 #include "MyContentSpriteRenderer.h"
 
+Player* Player::MainPlayer = nullptr;
+
 Player::Player()
 {
+	MainPlayer = this;
 }
 
 Player::~Player()
@@ -66,7 +69,7 @@ void Player::Render(float _Delta)
 	// GetTransform()->AddLocalRotation({0.0f, 0.0f, 360.0f * _Delta});
 };
 
-void Player::LevelChangeStart() 
+void Player::LevelChangeStart()
 {
 
 	if (nullptr == GameEngineSprite::Find("PlayerRun"))
@@ -80,7 +83,7 @@ void Player::LevelChangeStart()
 
 		GameEngineSprite::LoadFolder(NewDir.GetPlusFileName("PlayerRun").GetFullPath());
 
-		//GameEngineSprite::LoadSheet(NewDir.GetPlusFileName("Test\\TestAnimation.png").GetFullPath(), 3, 5);
+		GameEngineSprite::LoadSheet(NewDir.GetPlusFileName("Test\\TestAnimation.png").GetFullPath(), 3, 5);
 
 		// std::vector<GameEngineFile> File = NewDir.GetAllFile({ ".Png", });
 	}
@@ -90,18 +93,18 @@ void Player::LevelChangeStart()
 	{
 		MainRenderer = CreateComponent<MyContentSpriteRenderer>();
 		MainRenderer->CreateAnimation({ .AnimationName = "Run", .SpriteName = "PlayerRun", .ScaleToTexture = true });
-		//MainRenderer->CreateAnimation({ "Win", "TestAnimation.png", 0, 5, 0.1f, true, true });
-		MainRenderer->SetAnimationStartEvent("Run", 0, [this]
+		MainRenderer->CreateAnimation({ "Win", "TestAnimation.png", 0, 5, 0.1f, true, true });
+		MainRenderer->SetAnimationStartEvent("Win", 0, [this]
 			{
 				int a = 0;
 
-				//std::shared_ptr<TestObject> Actor = GetLevel()->CreateActor<TestObject>();
-				//Actor->GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition());
-				//Actor->GetTransform()->SetLocalScale({100.0f, 100.0f, 1.0f});
+		//std::shared_ptr<TestObject> Actor = GetLevel()->CreateActor<TestObject>();
+		//Actor->GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition());
+		//Actor->GetTransform()->SetLocalScale({100.0f, 100.0f, 1.0f});
 			});
 
-		MainRenderer->SetScaleRatio(1.0f);
-		MainRenderer->ChangeAnimation("Run");
+		MainRenderer->SetScaleRatio(5.0f);
+		MainRenderer->ChangeAnimation("Win");
 
 		{
 			Collsion = CreateComponent<GameEngineCollision>();
@@ -114,4 +117,9 @@ void Player::LevelChangeStart()
 	// MainRenderer->SetScaleToTexture("Test.png");
 
 	// 리소스 로드를 해야할 것이다.
+}
+
+void Player::TestCallBack()
+{
+	MsgTextBox("됩니다");
 }

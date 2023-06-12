@@ -73,28 +73,24 @@ void TitleLevel::Start()
 	BackGround->Render->Off();
 
 	Button1 = CreateActor<TestObject>();
-	Button1->Render->SetTexture("Titlebackground.png");
-	Button1->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, -5.0f });
-	Button1->GetTransform()->SetWorldScale({ 1920, 1080 });
-	Button1->Render->Off();
+	Button1->Render->SetTexture("게임시작.png");
+	Button1->GetTransform()->SetLocalPosition({ 0.0f, -45.0f, -10.0f });
+	Button1->GetTransform()->SetWorldScale({ 130, 31 });
 
 	Button2 = CreateActor<TestObject>();
-	Button2->Render->SetTexture("Titlebackground.png");
-	Button2->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, -5.0f });
-	Button2->GetTransform()->SetWorldScale({ 1920, 1080 });
-	Button2->Render->Off();
+	Button2->Render->SetTexture("조작방법.png");
+	Button2->GetTransform()->SetLocalPosition({ 0.0f, -135.0f, -10.0f });
+	Button2->GetTransform()->SetWorldScale({ 130, 31 });
 
 	Button3 = CreateActor<TestObject>();
-	Button3->Render->SetTexture("Titlebackground.png");
-	Button3->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, -5.0f });
-	Button3->GetTransform()->SetWorldScale({ 1920, 1080 });
-	Button3->Render->Off();
+	Button3->Render->SetTexture("제작진.png");
+	Button3->GetTransform()->SetLocalPosition({ 0.0f, -225.0f, -10.0f });
+	Button3->GetTransform()->SetWorldScale({ 130, 31 });
 
 	Button4 = CreateActor<TestObject>();
-	Button4->Render->SetTexture("Titlebackground.png");
-	Button4->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, -5.0f });
-	Button4->GetTransform()->SetWorldScale({ 1920, 1080 });
-	Button4->Render->Off();
+	Button4->Render->SetTexture("게임종료.png");
+	Button4->GetTransform()->SetLocalPosition({ 0.0f, -315.0f, -10.0f });
+	Button4->GetTransform()->SetWorldScale({ 130, 31 });
 }
 
 void TitleLevel::Update(float _DeltaTime)

@@ -7,11 +7,11 @@
 #include <GameEngineCore/GameEngineRenderer.h>
 #include <GameEnginePlatform/GameEngineInput.h>
 
-TestObject::TestObject() 
+TestObject::TestObject()
 {
 }
 
-TestObject::~TestObject() 
+TestObject::~TestObject()
 {
 }
 
@@ -24,5 +24,6 @@ void TestObject::Update(float _DeltaTime)
 void TestObject::Start()
 {
 	Render = CreateComponent<GameEngineSpriteRenderer>();
+	Render->GetTransform()->SetLocalScale({ 100.0f, 100.0f, 100.0f });
 	Render->CameraCullingOn();
 }

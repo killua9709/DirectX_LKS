@@ -2,6 +2,7 @@
 #include <GameEngineCore/GameEngineActor.h>
 
 // Ό³Έν :
+class GameEngineUIRenderer;
 class PlayLevelUIActor : public GameEngineActor
 {
 public:
@@ -20,6 +21,6 @@ protected:
 	void Update(float _Delta) override;
 
 private:
-
+	std::shared_ptr<GameEngineUIRenderer> ButtonDeath;
 };
 

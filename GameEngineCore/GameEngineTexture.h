@@ -2,14 +2,14 @@
 #include "GameEngineResource.h"
 #include <GameEngineCore/ThirdParty/DirectXTex/inc/DirectXTex.h>
 
-class GameEnginePixelColor 
+class GameEnginePixelColor
 {
 public:
 	static GameEnginePixelColor Black;
 
-	union 
+	union
 	{
-		struct 
+		struct
 		{
 			unsigned char r;
 			unsigned char g;
@@ -21,17 +21,17 @@ public:
 		int Color;
 	};
 
-	bool operator==(GameEnginePixelColor _Color) 
+	bool operator==(GameEnginePixelColor _Color)
 	{
 		return Color == _Color.Color;
 	}
 
-	float4 Tofloat4() 
+	float4 Tofloat4()
 	{
 
 	}
 
-	GameEnginePixelColor() 
+	GameEnginePixelColor()
 	{
 
 	}
@@ -68,11 +68,11 @@ public:
 
 	static void PathCheck(const std::string_view& _Path, const std::string_view& _Name);
 
-	static std::shared_ptr<GameEngineTexture> Load(const std::string_view& _Path, const std::string_view& _Name) 
+	static std::shared_ptr<GameEngineTexture> Load(const std::string_view& _Path, const std::string_view& _Name)
 	{
 		std::shared_ptr<GameEngineTexture> NewTexture = GameEngineResource::Create(_Name);
-
 		PathCheck(_Path, _Name);
+		NewTexture->SetPath(_Path);
 		NewTexture->ResLoad(_Path);
 		return NewTexture;
 	}
@@ -120,7 +120,7 @@ public:
 			MsgAssert("존재하지 않는 텍스처를 로드 하려고 했습니다.");
 		}
 
-		NewTexture->ResLoad(_Path);
+		NewTexture->ReLoad();
 		return NewTexture;
 	}
 
@@ -130,7 +130,7 @@ public:
 		return SRV;
 	}
 
-	ID3D11RenderTargetView* GetRTV() 
+	ID3D11RenderTargetView* GetRTV()
 	{
 		return RTV;
 	}
@@ -140,7 +140,7 @@ public:
 		return DSV;
 	}
 
-	int GetWidth() 
+	int GetWidth()
 	{
 		return Desc.Width;
 	}
@@ -150,12 +150,15 @@ public:
 		return Desc.Height;
 	}
 
-	float4 GetScale() 
+	float4 GetScale()
 	{
 		return float4(static_cast<float>(Desc.Width), static_cast<float>(Desc.Height));
 	}
 
 	GameEnginePixelColor GetPixel(int _X, int _Y, GameEnginePixelColor DefaultColor = GameEnginePixelColor::Black);
+
+	void ReLoad();
+	void Release();
 
 protected:
 
@@ -185,7 +188,5 @@ private:
 
 	void VSReset(UINT _Slot);
 	void PSReset(UINT _Slot);
-
-	void Release();
 };
 

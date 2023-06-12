@@ -47,7 +47,7 @@ struct OutPut
 
 OutPut Debug_VS(Input _Value)
 {
-    OutPut OutPutValue = (OutPut) 0;
+    OutPut OutPutValue = (OutPut)0;
     _Value.Pos.w = 1.0f;
     OutPutValue.Pos = mul(_Value.Pos, WorldViewProjectionMatrix);
     return OutPutValue;

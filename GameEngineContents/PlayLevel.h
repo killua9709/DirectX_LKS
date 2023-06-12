@@ -14,7 +14,7 @@ public:
 	PlayLevel(PlayLevel&& _Other) noexcept = delete;
 	PlayLevel& operator=(const PlayLevel& _Other) = delete;
 	PlayLevel& operator=(PlayLevel&& _Other) noexcept = delete;
-
+	
 
 	std::shared_ptr<class FadeEffect> FEffect;
 
