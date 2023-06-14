@@ -1,22 +1,14 @@
 #pragma once
-
+#include <memory>
+#include "GameEngineCamera.h"
+#include "GameEngineTransform.h"
 // Ό³Έν :
-class GameEngineDebug3D
+namespace GameEngineDebug
 {
-public:
-	// constrcuter destructer
-	GameEngineDebug3D();
-	~GameEngineDebug3D();
+	void DrawBox(class GameEngineCamera* _Cam, class GameEngineTransform* _Trans, float4 Color = float4::Green);
 
-	// delete Function
-	GameEngineDebug3D(const GameEngineDebug3D& _Other) = delete;
-	GameEngineDebug3D(GameEngineDebug3D&& _Other) noexcept = delete;
-	GameEngineDebug3D& operator=(const GameEngineDebug3D& _Other) = delete;
-	GameEngineDebug3D& operator=(GameEngineDebug3D&& _Other) noexcept = delete;
+	void DrawSphere(class GameEngineCamera* _Cam, class GameEngineTransform* _Trans, float4 Color = float4::Green);
 
-protected:
-
-private:
-
+	void DebugRender(class GameEngineCamera* _Cam, float _Delta);
 };
 
