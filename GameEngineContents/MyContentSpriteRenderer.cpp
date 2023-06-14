@@ -1,15 +1,15 @@
 #include "PrecompileHeader.h"
 #include "MyContentSpriteRenderer.h"
 
-MyContentSpriteRenderer::MyContentSpriteRenderer()
+MyContentSpriteRenderer::MyContentSpriteRenderer() 
 {
 }
 
-MyContentSpriteRenderer::~MyContentSpriteRenderer()
+MyContentSpriteRenderer::~MyContentSpriteRenderer() 
 {
 }
 
-void MyContentSpriteRenderer::Start()
+void MyContentSpriteRenderer::Start() 
 {
 	GameEngineRenderer::Start();
 

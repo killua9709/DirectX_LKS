@@ -143,13 +143,13 @@ void GameEngineCore::CoreResourcesInit()
 		std::vector<GameEngineVertex> Vertex;
 		Vertex.resize(24);
 		// 앞면
-		Vertex[0] = { float4(-0.5f, 0.5f, 0.5f) , float4(0.0f, 0.0f) };
-		Vertex[1] = { float4(0.5f, 0.5f, 0.5f)  , float4(1.0f, 0.0f) };
-		Vertex[2] = { float4(0.5f, -0.5f, 0.5f) , float4(1.0f, 1.0f) };
-		Vertex[3] = { float4(-0.5f, -0.5f, 0.5f), float4(0.0f, 1.0f) };
+		Vertex[0] = { float4(-0.5f, 0.5f, 0.5f) , float4(0.0f, 0.0f)};
+		Vertex[1] = { float4(0.5f, 0.5f, 0.5f)  , float4(1.0f, 0.0f)};
+		Vertex[2] = { float4(0.5f, -0.5f, 0.5f) , float4(1.0f, 1.0f)};
+		Vertex[3] = { float4(-0.5f, -0.5f, 0.5f), float4(0.0f, 1.0f)};
 
 		// 뒷면
-		Vertex[4] = { float4(-0.5f, 0.5f, 0.5f).RotaitonXDegReturn(180) , float4(0.0f, 0.0f) };
+		Vertex[4] = { float4(-0.5f, 0.5f, 0.5f).RotaitonXDegReturn(180) , float4(0.0f, 0.0f)};
 		Vertex[5] = { float4(0.5f, 0.5f, 0.5f).RotaitonXDegReturn(180)  , float4(1.0f, 0.0f) };
 		Vertex[6] = { float4(0.5f, -0.5f, 0.5f).RotaitonXDegReturn(180) , float4(1.0f, 1.0f) };
 		Vertex[7] = { float4(-0.5f, -0.5f, 0.5f).RotaitonXDegReturn(180), float4(0.0f, 1.0f) };
@@ -227,7 +227,7 @@ void GameEngineCore::CoreResourcesInit()
 		Mesh->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 	}
 
-
+	
 	// Sphere
 		// 스피어
 	{
@@ -248,8 +248,8 @@ void GameEngineCore::CoreResourcesInit()
 
 		VBVector.push_back(V);
 
-		UINT iStackCount = 40; // 가로 분할 개수입니다.
-		UINT iSliceCount = 40; // 세로분할 개수
+		UINT iStackCount = 16; // 가로 분할 개수입니다.
+		UINT iSliceCount = 16; // 세로분할 개수
 
 		float yRotAngle = GameEngineMath::PIE / (float)iStackCount;
 		float zRotAngle = (GameEngineMath::PIE * 2) / (float)iSliceCount;
@@ -329,7 +329,7 @@ void GameEngineCore::CoreResourcesInit()
 
 		GameEngineVertexBuffer::Create("Sphere", VBVector);
 		GameEngineIndexBuffer::Create("Sphere", IBVector);
-
+		
 		GameEngineMesh::Create("Sphere");
 
 

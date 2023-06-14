@@ -20,7 +20,7 @@ class GameEngineLevel : public GameEngineObject
 	friend class GameEngineTexture;
 
 public:
-	static void IsDebugSwitch()
+	static void IsDebugSwitch() 
 	{
 		IsDebugRender = !IsDebugRender;
 	}
@@ -71,7 +71,7 @@ public:
 
 	std::shared_ptr<class GameEngineCamera> CreateNewCamera(int _Order);
 
-	std::shared_ptr<class GameEngineCamera> GetMainCamera()
+	std::shared_ptr<class GameEngineCamera> GetMainCamera() 
 	{
 		return MainCamera;
 	}
@@ -83,10 +83,23 @@ public:
 
 	std::shared_ptr<GameEngineCamera> GetCamera(int _CameraOrder);
 
-	std::shared_ptr<GameEngineRenderTarget> GetLastTarget()
+	std::shared_ptr<GameEngineRenderTarget> GetLastTarget() 
 	{
 		return LastTarget;
 	}
+
+	// 일부러 무겁게 만든 함수.
+	template<typename EnumType>
+	std::list<std::shared_ptr<GameEngineActor>> GetActorGroup(EnumType _Index)
+	{
+		return GetActorGroup(static_cast<int>(_Index));
+	}
+
+	std::list<std::shared_ptr<GameEngineActor>> GetActorGroup(int _Index) 
+	{
+		return Actors[_Index];
+	}
+
 
 protected:
 	// 레벨이 바뀌어서 시작할때
@@ -97,12 +110,12 @@ protected:
 	void Update(float _DeltaTime);
 	void Render(float _DeltaTime);
 
+	void AllActorDestroy();
 private:
 	static bool IsDebugRender;
 
 	// 모든 카메라의 내용이 다 종합된.
 	std::shared_ptr<GameEngineRenderTarget> LastTarget;
-
 
 	//      이름           경로
 	std::map<std::string, std::string> TexturePath;
@@ -130,9 +143,15 @@ private:
 	void ActorLevelChangeStart();
 	void ActorLevelChangeEnd();
 
+	void LevelCameraInit();
+
+	void DestroyCamera();
+
+
 	void TextureUnLoad(GameEngineLevel* _NextLevel);
 
 	void TextureReLoad(GameEngineLevel* _PrevLevel);
 
 };
 
+ 

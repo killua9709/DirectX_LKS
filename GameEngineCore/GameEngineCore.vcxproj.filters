@@ -142,14 +142,17 @@
     <ClInclude Include="GameEngineUIRenderer.h">
       <Filter>Object\Rendering\Component\2D</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngineButton.h">
-      <Filter>Content</Filter>
-    </ClInclude>
     <ClInclude Include="GameEngineFSM.h">
-      <Filter>Content</Filter>
+      <Filter>Content\Patten</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineButton.h">
+      <Filter>Content\UI</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineDebug3D.h">
       <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\FW1Font\Inc\FW1FontWrapper.h">
+      <Filter>ThirdParty\Fw1Font\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -290,11 +293,11 @@
     <ClCompile Include="GameEngineUIRenderer.cpp">
       <Filter>Object\Rendering\Component\2D</Filter>
     </ClCompile>
-    <ClCompile Include="GameEngineButton.cpp">
-      <Filter>Content</Filter>
-    </ClCompile>
     <ClCompile Include="GameEngineFSM.cpp">
-      <Filter>Content</Filter>
+      <Filter>Content\Patten</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineButton.cpp">
+      <Filter>Content\UI</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineDebug3D.cpp">
       <Filter>Debug</Filter>
@@ -306,9 +309,6 @@
     </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{c16991ef-8e9a-49d8-b420-853cff2955d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Manager">
-      <UniqueIdentifier>{b420b215-6a8f-4fa5-bec3-c52265a46089}</UniqueIdentifier>
     </Filter>
     <Filter Include="Object\Rendering">
       <UniqueIdentifier>{6e970db4-fd75-4e59-8a4d-7b21615522d4}</UniqueIdentifier>
@@ -371,10 +371,31 @@
       <UniqueIdentifier>{652ba404-c390-4c5a-b3af-a2c8b2f3336d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Content">
-      <UniqueIdentifier>{aa012691-fd23-4cf9-8633-74d78a371e22}</UniqueIdentifier>
+      <UniqueIdentifier>{0ea0f19a-ed9f-42de-afea-08993b589204}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\Patten">
+      <UniqueIdentifier>{362f2a30-aba2-474b-8e0b-b5619d8a40f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\UI">
+      <UniqueIdentifier>{b4085df0-93a0-48a0-9313-f2e07587dcce}</UniqueIdentifier>
     </Filter>
     <Filter Include="Debug">
-      <UniqueIdentifier>{8971f234-118f-4d29-8925-3ace846e8eab}</UniqueIdentifier>
+      <UniqueIdentifier>{e4061487-0602-4e9b-bae7-727663d40d33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Fw1Font">
+      <UniqueIdentifier>{faa3abdd-e3d9-42c5-b479-b4f328524a6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Fw1Font\Header">
+      <UniqueIdentifier>{04f945cd-bdb5-47ce-a6b9-2dcb5cfaa543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Fw1Font\bin">
+      <UniqueIdentifier>{c222c17d-9afd-43e4-a7b1-9718e6e18088}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Fw1Font\bin\Debug">
+      <UniqueIdentifier>{36fa6dfb-3509-4e7d-8f7d-8553cf263482}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Fw1Font\bin\Release">
+      <UniqueIdentifier>{c9a2e2ec-0a21-4f6e-85a7-897e30369c14}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -386,6 +407,18 @@
     </None>
     <None Include="ThirdParty\DirectXTex\lib\x64\Release\DirectXTex.lib">
       <Filter>ThirdParty\DirectXTex\bin\Release</Filter>
+    </None>
+    <None Include="ThirdParty\FW1Font\lib\x64\Release\FW1FontWrapper.dll">
+      <Filter>ThirdParty\Fw1Font\bin\Release</Filter>
+    </None>
+    <None Include="ThirdParty\FW1Font\lib\x64\Debug\FW1FontWrapper.lib">
+      <Filter>ThirdParty\Fw1Font\bin\Debug</Filter>
+    </None>
+    <None Include="ThirdParty\FW1Font\lib\x64\Debug\FW1FontWrapper.dll">
+      <Filter>ThirdParty\Fw1Font\bin\Debug</Filter>
+    </None>
+    <None Include="ThirdParty\FW1Font\lib\x64\Release\FW1FontWrapper.lib">
+      <Filter>ThirdParty\Fw1Font\bin\Release</Filter>
     </None>
   </ItemGroup>
 </Project>

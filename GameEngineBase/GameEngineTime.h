@@ -36,12 +36,12 @@ public:
 		return floatDeltaTime;
 	}
 
-	float GetTimeScaleDeltaTime()
+	float GetTimeScaleDeltaTime() 
 	{
 		return floatDeltaTime * GlobalTimeScale;
 	}
 
-	void SetGlobalTimeScale(float _TimeScale)
+	void SetGlobalTimeScale(float _TimeScale) 
 	{
 		GlobalTimeScale = _TimeScale;
 	}
@@ -49,7 +49,7 @@ public:
 	template<typename EnumType>
 	void SetUpdateOrderTimeScale(EnumType _Order, float _Time)
 	{
-		SetOrderTimeScale(static_cast<int>(_Order), _Time);
+		SetUpdateOrderTimeScale(static_cast<int>(_Order), _Time);
 	}
 
 	void SetUpdateOrderTimeScale(int _Order, float _Time)
@@ -59,7 +59,7 @@ public:
 
 	void SetAllUpdateOrderTimeScale(float _Time)
 	{
-		for (std::pair<const int, float>& Pair : UpdateTimeScale)
+		for (std::pair<const int, float>& Pair  : UpdateTimeScale)
 		{
 			Pair.second = _Time;
 		}

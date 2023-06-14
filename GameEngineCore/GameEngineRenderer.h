@@ -2,7 +2,7 @@
 #include "GameEngineComponent.h"
 #include "GameEngineShader.h"
 
-class GameEngineRenderUnit
+class GameEngineRenderUnit 
 	: std::enable_shared_from_this<GameEngineRenderUnit>
 {
 public:
@@ -53,12 +53,12 @@ public:
 	// 이걸 사용하게되면 이 랜더러의 유니트는 자신만의 클론 파이프라인을 가지게 된다.
 	std::shared_ptr<GameEngineRenderingPipeLine> GetPipeLineClone(int _index = 0);
 
-	inline GameEngineShaderResHelper& GetShaderResHelper(int _index = 0)
+	inline GameEngineShaderResHelper& GetShaderResHelper(int _index = 0) 
 	{
 		return Units[_index]->ShaderResHelper;
 	}
 
-	void CameraCullingOn()
+	void CameraCullingOn() 
 	{
 		IsCameraCulling = true;
 	}

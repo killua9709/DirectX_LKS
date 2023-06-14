@@ -103,7 +103,7 @@ void GameEngineWindow::WindowCreate(HINSTANCE _hInstance, const std::string_view
 
     // (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX)
 
-    HWnd = CreateWindow("GameEngineWindowDefault", _TitleName.data(), WS_POPUP,
+    HWnd = CreateWindow("GameEngineWindowDefault", _TitleName.data(), WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, _hInstance, nullptr);
 
     if (nullptr == HWnd)
@@ -147,7 +147,6 @@ int GameEngineWindow::WindowLoop(
     std::function<void()> _Loop,
     std::function<void()> _End
 )
-
 {
     if (nullptr != _Start)
     {

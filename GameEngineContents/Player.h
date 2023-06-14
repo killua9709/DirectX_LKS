@@ -37,7 +37,9 @@ private:
 	float Angle = 0.0f;
 
 	std::shared_ptr<class GameEngineCollision> Collsion;
-
+	std::shared_ptr<class GameEngineComponent> Pivot;
+	std::shared_ptr<class GameEngineComponent> Pivot2;
+	std::shared_ptr<class GameEngineSpriteRenderer> SubRender;
 	GameEngineFSM FSM;
 
 };

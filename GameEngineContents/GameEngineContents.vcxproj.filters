@@ -22,11 +22,8 @@
     <ClInclude Include="FadeEffect.h">
       <Filter>PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="TutoLevel.h">
+    <ClInclude Include="TileMapLevel.h">
       <Filter>Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -55,11 +52,8 @@
       <Filter>PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="Contents_Resources.cpp" />
-    <ClCompile Include="TutoLevel.cpp">
+    <ClCompile Include="TileMapLevel.cpp">
       <Filter>Levels</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -61,24 +61,24 @@ cbuffer AtlasData : register(b1)
 
 OutPut Texture_VS(Input _Value)
 {
-    OutPut OutPutValue = (OutPut)0;
-
+    OutPut OutPutValue = (OutPut) 0;
+	
     _Value.Pos.w = 1.0f;
     OutPutValue.Pos = mul(_Value.Pos, WorldViewProjectionMatrix);
     // OutPutValue.UV = _Value.UV;
-
+    
     // [][]
     // [][]
-
+    
     // 0.5 0.0  0.5 0.5 
-
+    
     // 0,0    1,0
     //
     //
     // 0,1    1,1
     OutPutValue.UV.x = (_Value.UV.x * FrameScale.x) + FramePos.x;
     OutPutValue.UV.y = (_Value.UV.y * FrameScale.y) + FramePos.y;
-
+    
     return OutPutValue;
 }
 
@@ -102,9 +102,9 @@ struct OutColor
 float4 Texture_PS(OutPut _Value) : SV_Target0
 {
     float4 Color = DiffuseTex.Sample(CLAMPSAMPLER, _Value.UV.xy);
-
+    
     Color *= MulColor;
     Color += PlusColor;
-
+    
     return Color;
 }
