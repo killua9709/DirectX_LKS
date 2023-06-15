@@ -28,6 +28,7 @@ private:
 	std::shared_ptr<class TestObject> BackBlack;
 	std::shared_ptr<class TestObject> Logo;
 	std::shared_ptr<class TestObject> Logo2;
+	std::shared_ptr<class TestObject> Logo3;
 	std::shared_ptr<class TestObject> BackGround;
 
 	//오브젝트변수

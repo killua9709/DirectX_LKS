@@ -61,6 +61,11 @@ void TitleLevel::Start()
 	Logo2->Render.get()->GetTransform()->SetWorldScale({ 60.5f, 94 });
 	Logo2->Render->Off();
 
+	Logo3 = CreateActor<TestObject>();
+	Logo3->Render->SetTexture("Å°º¸µå.png");
+	Logo3->GetTransform()->SetLocalPosition({ 0, 150, -10.0f });
+	Logo3->Render.get()->GetTransform()->SetWorldScale({ 1237.0f, 693 });
+
 	BackBlack = CreateActor<TestObject>();
 	BackBlack->Render->SetTexture("Black.png");
 	BackBlack->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, 0.0f });
