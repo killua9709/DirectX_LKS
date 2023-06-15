@@ -255,7 +255,7 @@ void GameEngineLevel::ActorRender(float _DeltaTime)
 	//	}
 	//}
 
-	static bool GUIRender = true;
+	static bool GUIRender = false;
 
 	if (true == GameEngineInput::IsDown("GUISwitch"))
 	{
