@@ -79,6 +79,44 @@ void GameEngineCore::CoreResourcesInit()
 		SamperData.MinLOD = -FLT_MAX;
 		SamperData.MaxLOD = FLT_MAX;
 
+		GameEngineSampler::Create("ENGINEBASE", SamperData);
+	}
+
+	{
+		D3D11_SAMPLER_DESC SamperData = {};
+		SamperData.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+		SamperData.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+		SamperData.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+		SamperData.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+		// 텍스처가 멀리있을때 뭉갤꺼냐
+		// 안뭉갠다.
+		SamperData.MipLODBias = 0.0f;
+		SamperData.MaxAnisotropy = 1;
+		SamperData.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+		SamperData.MinLOD = -FLT_MAX;
+		SamperData.MaxLOD = FLT_MAX;
+
+		GameEngineSampler::Create("POINTSAMPLER", SamperData);
+	}
+
+
+
+	{
+		D3D11_SAMPLER_DESC SamperData = {};
+
+		// 
+		SamperData.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		SamperData.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+		SamperData.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+		SamperData.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+		// 텍스처가 멀리있을때 뭉갤꺼냐
+		// 안뭉갠다.
+		SamperData.MipLODBias = 0.0f;
+		SamperData.MaxAnisotropy = 1;
+		SamperData.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+		SamperData.MinLOD = -FLT_MAX;
+		SamperData.MaxLOD = FLT_MAX;
+
 		GameEngineSampler::Create("CLAMPSAMPLER", SamperData);
 	}
 
@@ -366,6 +404,34 @@ void GameEngineCore::CoreResourcesInit()
 		GameEngineBlend::Create("AlphaBlend", Desc);
 	}
 
+	{
+		// 블랜드
+		D3D11_BLEND_DESC Desc = { 0, };
+
+		// 자동으로 알파부분을 제거해서 출력해주는 건데
+		// 졸라느립니다.
+		// Desc.AlphaToCoverageEnable = false;
+
+		// 
+		Desc.AlphaToCoverageEnable = false;
+		// 블랜드를 여러개 넣을거냐
+		// TRUE면 블랜드를 여러개 넣습니다.
+		// false면 몇개의 랜더타겟이 있건 0번에 세팅된 걸로 전부다 블랜드.
+		Desc.IndependentBlendEnable = false;
+
+		Desc.RenderTarget[0].BlendEnable = true;
+		Desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		Desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		Desc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+		Desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+
+		Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_MAX;
+		Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+		Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+
+		GameEngineBlend::Create("MergeBlend", Desc);
+	}
+
 
 
 	{
@@ -522,13 +588,26 @@ void GameEngineCore::CoreResourcesInit()
 		}
 
 		{
+			std::shared_ptr<GameEngineRenderingPipeLine> Pipe = GameEngineRenderingPipeLine::Create("TileMap");
+
+			//Pipe->SetVertexBuffer("Rect");
+			//Pipe->SetIndexBuffer("Rect");
+			Pipe->SetVertexShader("TileMapShader.hlsl");
+			Pipe->SetRasterizer("Engine2DBase");
+			Pipe->SetPixelShader("TileMapShader.hlsl");
+			Pipe->SetBlendState("AlphaBlend");
+			Pipe->SetDepthState("EngineDepth");
+		}
+
+
+		{
 			std::shared_ptr<GameEngineRenderingPipeLine> Pipe = GameEngineRenderingPipeLine::Create("Merge");
 			//Pipe->SetVertexBuffer("FullRect");
 			//Pipe->SetIndexBuffer("FullRect");
 			Pipe->SetVertexShader("MergeShader.hlsl");
 			Pipe->SetRasterizer("Engine2DBase");
 			Pipe->SetPixelShader("MergeShader.hlsl");
-			Pipe->SetBlendState("AlphaBlend");
+			Pipe->SetBlendState("MergeBlend");
 			Pipe->SetDepthState("AlwayDepth");
 
 			GameEngineRenderTarget::RenderTargetUnitInit();
@@ -546,12 +625,23 @@ void GameEngineCore::CoreResourcesInit()
 		}
 
 	}
+
+	{
+		std::shared_ptr<GameEngineRenderingPipeLine> Pipe = GameEngineRenderingPipeLine::Create("Blur");
+
+		Pipe->SetVertexShader("BlurShader.hlsl");
+		Pipe->SetRasterizer("Engine2DBase");
+		Pipe->SetPixelShader("BlurShader.hlsl");
+		Pipe->SetBlendState("AlphaBlend");
+		Pipe->SetDepthState("EngineDepth");
+	}
 }
 
 void GameEngineCore::CoreResourcesEnd()
 {
 	GameEngineMesh::ResourcesClear();
 	GameEngineBlend::ResourcesClear();
+	GameEngineSound::ResourcesClear();
 	GameEngineTexture::ResourcesClear();
 	GameEngineDepthState::ResourcesClear();
 	GameEngineRasterizer::ResourcesClear();

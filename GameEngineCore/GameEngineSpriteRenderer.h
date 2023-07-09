@@ -4,6 +4,13 @@
 #include "EngineContentRenderingStruct.h"
 #include <map>
 
+class AnimationStartEvent
+{
+public:
+	bool IsEvent = false;
+	std::function<void()> Function;
+};
+
 class AnimationInfo : public std::enable_shared_from_this<AnimationInfo>
 {
 	friend class GameEngineSpriteRenderer;
@@ -44,7 +51,7 @@ public:
 	std::vector<float> FrameTime = std::vector<float>();
 
 	std::map<size_t, std::function<void()>> UpdateEventFunction;
-	std::map<size_t, std::function<void()>> StartEventFunction;
+	std::map<size_t, AnimationStartEvent> StartEventFunction;
 
 	bool IsEnd();
 };
@@ -62,6 +69,18 @@ public:
 	bool ScaleToTexture = false;
 	std::vector<size_t> FrameIndex = std::vector<size_t>();
 	std::vector<float> FrameTime = std::vector<float>();
+};
+
+enum class ClipXDir
+{
+	Left,
+	Right,
+};
+
+enum class ClipYDir
+{
+	Top,
+	Bot,
 };
 
 
@@ -117,6 +136,10 @@ public:
 		return AtlasData;
 	}
 
+	// 내 눈에 보이는 이미지에서 0.1;
+	void ImageClippingX(float _Ratio, ClipXDir _Dir);
+	void ImageClippingY(float _Ratio, ClipYDir _Dir);
+
 	inline float GetScaleRatio() const
 	{
 		return ScaleRatio;
@@ -145,10 +168,19 @@ public:
 
 	std::string GetTexName();
 
+	void SetRenderEndCallBack(std::function<void(GameEngineRenderer*)> _CallBack)
+	{
+		RenderEndCallBack = _CallBack;
+	}
+
 
 protected:
 	void SpriteRenderInit();
 	float4 AtlasData;
+	float4 Clip = float4::One;
+	float4 Flip = float4::Zero;
+
+	std::function<void(GameEngineRenderer*)> RenderEndCallBack = nullptr;
 
 private:
 	void Update(float _Delta) override;
@@ -159,11 +191,10 @@ private:
 
 	std::shared_ptr<AnimationInfo> CurAnimation;
 
-
-
 	std::shared_ptr<GameEngineSprite> Sprite = nullptr;
 	size_t Frame = -1;
 
+	std::shared_ptr<GameEngineTexture> CurTexture;
 
 	float ScaleRatio = 1.0f;
 

@@ -38,6 +38,8 @@ void PlayLevel::Update(float _DeltaTime)
 
 void PlayLevel::Start()
 {
+	// GetMainCamera()->GetCamTarget()->DepthSettingOff();
+
 	{
 		GameEngineDirectory NewDir;
 		NewDir.MoveParentToDirectory("ContentResources");
@@ -52,7 +54,6 @@ void PlayLevel::Start()
 		{
 			GameEngineTexture::Load(File[i].GetFullPath());
 		}
-
 	}
 }
 void PlayLevel::LevelChangeStart()

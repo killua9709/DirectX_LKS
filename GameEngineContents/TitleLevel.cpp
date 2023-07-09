@@ -65,6 +65,7 @@ void TitleLevel::Start()
 	Logo3->Render->SetTexture("키보드.png");
 	Logo3->GetTransform()->SetLocalPosition({ 0, 150, -10.0f });
 	Logo3->Render.get()->GetTransform()->SetWorldScale({ 1237.0f, 693 });
+	Logo3->Render->Off();
 
 	BackBlack = CreateActor<TestObject>();
 	BackBlack->Render->SetTexture("Black.png");
@@ -81,28 +82,36 @@ void TitleLevel::Start()
 	Button1->Render->SetTexture("게임시작.png");
 	Button1->GetTransform()->SetLocalPosition({ 0.0f, -45.0f, -10.0f });
 	Button1->Render.get()->GetTransform()->SetWorldScale({ 130, 31 });
+	Button1->Render->Off();
+
 
 	Button2 = CreateActor<TestObject>();
 	Button2->Render->SetTexture("조작방법.png");
 	Button2->GetTransform()->SetLocalPosition({ 0.0f, -135.0f, -10.0f });
 	Button2->Render.get()->GetTransform()->SetWorldScale({ 130, 31 });
+	Button2->Render->Off();
+
 
 	Button3 = CreateActor<TestObject>();
 	Button3->Render->SetTexture("제작진.png");
 	Button3->GetTransform()->SetLocalPosition({ 0.0f, -225.0f, -10.0f });
 	Button3->Render.get()->GetTransform()->SetWorldScale({ 130, 31 });
+	Button3->Render->Off();
+
 
 	Button4 = CreateActor<TestObject>();
 	Button4->Render->SetTexture("게임종료.png");
 	Button4->GetTransform()->SetLocalPosition({ 0.0f, -315.0f, -10.0f });
 	Button4->Render.get()->GetTransform()->SetWorldScale({ 130, 31 });
+	Button4->Render->Off();
+
 }
 
 void TitleLevel::Update(float _DeltaTime)
 {
 	if (true == GameEngineInput::IsDown("LevelChangeKey"))
 	{
-		GameEngineCore::ChangeLevel("TutoLevel");
+		GameEngineCore::ChangeLevel("TitleMapLevel");
 	}
 
 	LogoTime += _DeltaTime;
@@ -153,7 +162,10 @@ void TitleLevel::Update(float _DeltaTime)
 		Logo->Render.get()->GetTransform()->SetWorldScale({ 905, 332 });
 		Logo2->Render->On();
 		FEffect->FadeOut();
+		Button1->Render->On();
+		Button2->Render->On();
+		Button3->Render->On();
+		Button4->Render->On();
 		First = true;
-
 	}
 }

@@ -6,6 +6,7 @@
 #include <functional>
 #include <string_view>
 #include <typeinfo>
+#include <GameEngineBase/GameEngineThreadJobQueue.h>
 
 #pragma comment(lib, "GameEngineBase.lib")
 #pragma comment(lib, "GameEnginePlatform.lib")
@@ -68,11 +69,12 @@ public:
 		return MainLevel;
 	}
 
+	static GameEngineThreadJobQueue JobQueue;
 
 protected:
 
 private:
-	static class GameEngineLevel* CurLoadLevel;
+	static std::shared_ptr<class GameEngineLevel> CurLoadLevel;
 
 	static void CoreResourcesInit();
 	static void CoreResourcesEnd();
@@ -86,5 +88,6 @@ private:
 	static std::map<std::string, std::shared_ptr<GameEngineLevel>> LevelMap;
 	static std::shared_ptr<GameEngineLevel> MainLevel;
 	static std::shared_ptr<GameEngineLevel> NextLevel;
+
 };
 

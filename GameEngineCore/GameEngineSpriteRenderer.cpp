@@ -19,6 +19,10 @@ void AnimationInfo::Reset()
 	CurTime = FrameTime[0];
 	IsEndValue = false;
 	IsPauseValue = false;
+	for (std::pair<const size_t, AnimationStartEvent>& Pair : StartEventFunction)
+	{
+		Pair.second.IsEvent = false;
+	}
 }
 
 void AnimationInfo::Update(float _DeltaTime)
@@ -39,6 +43,18 @@ void AnimationInfo::Update(float _DeltaTime)
 	size_t CurFrameIndex = FrameIndex[CurFrame];
 
 
+	if (StartEventFunction.end() != StartEventFunction.find(CurFrameIndex))
+	{
+		if (false == StartEventFunction[CurFrameIndex].IsEvent
+			&& nullptr != StartEventFunction[CurFrameIndex].Function)
+		{
+			StartEventFunction[CurFrameIndex].Function();
+			StartEventFunction[CurFrameIndex].IsEvent = true;
+		}
+		
+	}
+
+
 	if (UpdateEventFunction.end() != UpdateEventFunction.find(CurFrameIndex))
 	{
 		UpdateEventFunction[CurFrameIndex]();
@@ -50,9 +66,6 @@ void AnimationInfo::Update(float _DeltaTime)
 	{
 		++CurFrame;
 
-
-
-
 		if (FrameIndex.size() <= CurFrame)
 		{
 			IsEndValue = true;
@@ -60,6 +73,11 @@ void AnimationInfo::Update(float _DeltaTime)
 			if (true == Loop)
 			{
 				CurFrame = 0;
+
+				for (std::pair<const size_t, AnimationStartEvent>& Pair : StartEventFunction)
+				{
+					Pair.second.IsEvent = false;
+				}
 			}
 			else
 			{
@@ -68,24 +86,7 @@ void AnimationInfo::Update(float _DeltaTime)
 			}
 		}
 
-		//다음프레임이 존재하면서
-		else
-		{
-			CurFrameIndex = FrameIndex[CurFrame];
-
-			//Start콜백이 있다면 콜백을 호출
-			if (StartEventFunction.end() != StartEventFunction.find(CurFrameIndex))
-			{
-				StartEventFunction[CurFrameIndex]();
-			}
-		}
-
-
 		CurTime += FrameTime[CurFrame];
-
-		// 0 ~ 9
-
-		// 9
 	}
 }
 
@@ -111,20 +112,36 @@ void GameEngineSpriteRenderer::Start()
 void GameEngineSpriteRenderer::SetTexture(const std::string_view& _Name)
 {
 	GetShaderResHelper().SetTexture("DiffuseTex", _Name);
+
+	//Animation이 동작하는 SpriteRenderer에 다시 텍스처를 세팅할 때 사용됩니다.
+	CurAnimation = nullptr;
+	AtlasData = float4{ 0.0f, 0.0f, 1.0f, 1.0f };
+
+	std::shared_ptr<GameEngineTexture> FindTex = GameEngineTexture::Find(_Name);
+	if (nullptr == FindTex)
+	{
+		MsgAssert("존재하지 않는 이미지 입니다.");
+		return;
+	}
+	CurTexture = FindTex;
+
 }
 
 void GameEngineSpriteRenderer::SetFlipX()
 {
-	float4 LocalScale = GetTransform()->GetLocalScale();
-	LocalScale.x = -LocalScale.x;
-	GetTransform()->SetLocalScale(LocalScale);
+	Flip.x = Flip.x != 0.0f ? 0.0f : 1.0f;
+	//float4 LocalScale = GetTransform()->GetLocalScale();
+	//LocalScale.x = -LocalScale.x;
+	//GetTransform()->SetLocalScale(LocalScale);
 }
 
 void GameEngineSpriteRenderer::SetFlipY()
 {
-	float4 LocalScale = GetTransform()->GetLocalScale();
-	LocalScale.y = -LocalScale.y;
-	GetTransform()->SetLocalScale(LocalScale);
+	Flip.y = Flip.y != 0.0f ? 0.0f : 1.0f;
+
+	//float4 LocalScale = GetTransform()->GetLocalScale();
+	//LocalScale.y = -LocalScale.y;
+	//GetTransform()->SetLocalScale(LocalScale);
 }
 
 void GameEngineSpriteRenderer::SetScaleToTexture(const std::string_view& _Name)
@@ -140,6 +157,9 @@ void GameEngineSpriteRenderer::SetScaleToTexture(const std::string_view& _Name)
 
 	float4 Scale = float4(static_cast<float>(FindTex->GetWidth()), static_cast<float>(FindTex->GetHeight()), 1);
 	GetTransform()->SetLocalScale(Scale);
+	CurTexture = FindTex;
+
+
 }
 
 void GameEngineSpriteRenderer::SetSprite(const std::string_view& _SpriteName, size_t _Frame/* = 0*/)
@@ -150,6 +170,7 @@ void GameEngineSpriteRenderer::SetSprite(const std::string_view& _SpriteName, si
 	const SpriteInfo& Info = Sprite->GetSpriteInfo(Frame);
 	GetShaderResHelper().SetTexture("DiffuseTex", Info.Texture);
 	AtlasData = Info.CutData;
+	CurTexture = Info.Texture;
 }
 
 void GameEngineSpriteRenderer::SetFrame(size_t _Frame)
@@ -159,6 +180,7 @@ void GameEngineSpriteRenderer::SetFrame(size_t _Frame)
 	const SpriteInfo& Info = Sprite->GetSpriteInfo(Frame);
 	GetShaderResHelper().SetTexture("DiffuseTex", Info.Texture);
 	AtlasData = Info.CutData;
+	CurTexture = Info.Texture;
 }
 
 std::shared_ptr<AnimationInfo> GameEngineSpriteRenderer::FindAnimation(const std::string_view& _Name)
@@ -296,7 +318,6 @@ void GameEngineSpriteRenderer::ChangeAnimation(const std::string_view& _Name, si
 	{
 		CurAnimation->CurFrame = _Frame;
 	}
-
 }
 
 void GameEngineSpriteRenderer::Update(float _Delta)
@@ -308,16 +329,17 @@ void GameEngineSpriteRenderer::Update(float _Delta)
 		const SpriteInfo& Info = CurAnimation->CurSpriteInfo();
 
 		GetShaderResHelper().SetTexture("DiffuseTex", Info.Texture);
+
 		AtlasData = Info.CutData;
 
 		if (true == CurAnimation->ScaleToTexture)
 		{
 			std::shared_ptr<GameEngineTexture> Texture = Info.Texture;
-
+			CurTexture = Texture;
 			float4 Scale = Texture->GetScale();
 
-			Scale.x *= Info.CutData.SizeX;
-			Scale.y *= Info.CutData.SizeY;
+			Scale.x *= AtlasData.SizeX;
+			Scale.y *= AtlasData.SizeY;
 			Scale.z = 1.0f;
 
 			Scale *= ScaleRatio;
@@ -331,6 +353,13 @@ void GameEngineSpriteRenderer::Render(float _Delta)
 {
 
 	GameEngineRenderer::Render(_Delta);
+	//AtlasData = float4(0, 0, 1, 1);
+
+	if (nullptr != RenderEndCallBack)
+	{
+		RenderEndCallBack(this);
+	}
+
 }
 
 void GameEngineSpriteRenderer::SetAnimationUpdateEvent(const std::string_view& _AnimationName, size_t _Frame, std::function<void()> _Event)
@@ -355,7 +384,8 @@ void GameEngineSpriteRenderer::SetAnimationStartEvent(const std::string_view& _A
 		MsgAssert("존재하지 않는 애니메이션에 이벤트 세팅을 하려고 했습니다.");
 	}
 
-	Info->StartEventFunction[_Frame] = _Event;
+	Info->StartEventFunction[_Frame].IsEvent = false;
+	Info->StartEventFunction[_Frame].Function = _Event;
 }
 
 std::string GameEngineSpriteRenderer::GetTexName()
@@ -381,4 +411,46 @@ void GameEngineSpriteRenderer::SpriteRenderInit()
 
 	GetShaderResHelper().SetConstantBufferLink("AtlasData", AtlasData);
 	GetShaderResHelper().SetConstantBufferLink("ColorOption", ColorOptionValue);
+	GetShaderResHelper().SetConstantBufferLink("ClipData", Clip);
+	GetShaderResHelper().SetConstantBufferLink("FlipData", Flip);
+}
+
+
+// 내 눈에 보이는 이미지에서 0.1;
+void GameEngineSpriteRenderer::ImageClippingX(float _Ratio, ClipXDir _Dir)
+{
+	Clip.x = _Ratio;
+
+	if (_Dir == ClipXDir::Left)
+	{
+		Clip.z = 0;
+	}
+	else {
+		Clip.z = 1;
+	}
+
+	if (0.0f >= Clip.x)
+	{
+		Clip.x = 0.0f;
+	}
+}
+
+
+void GameEngineSpriteRenderer::ImageClippingY(float _Ratio, ClipYDir _Dir)
+{
+	Clip.y = _Ratio;
+
+	if (_Dir == ClipYDir::Top)
+	{
+		Clip.w = 0;
+	}
+	else {
+		Clip.w = 1;
+	}
+
+
+	if (0.0f >= Clip.y)
+	{
+		Clip.y = 0.0f;
+	}
 }

@@ -73,6 +73,7 @@ void GameEngineRenderUnit::Render(float _DeltaTime)
 
 GameEngineRenderer::GameEngineRenderer() 
 {
+	BaseValue.ScreenScale = GameEngineWindow::GetScreenSize();
 }
 
 GameEngineRenderer::~GameEngineRenderer() 
@@ -92,11 +93,16 @@ void GameEngineRenderer::RenderTransformUpdate(GameEngineCamera* _Camera)
 		return;
 	}
 
+	// RenderCamera = _Camera;
+
 	GetTransform()->SetCameraMatrix(_Camera->GetView(), _Camera->GetProjection());
 }
 
 void GameEngineRenderer::Render(float _Delta) 
 {
+	BaseValue.Time.x += _Delta;
+	BaseValue.Time.y = _Delta;
+
 	// GameEngineDevice::GetContext()->VSSetConstantBuffers();
 	// GameEngineDevice::GetContext()->PSSetConstantBuffers();
 
@@ -188,22 +194,16 @@ void GameEngineRenderer::SetPipeLine(const std::string_view& _Name, int _index)
 
 	Unit->SetPipeLine(_Name);
 
-	{
-		const GameEngineShaderResHelper& Res = Unit->Pipe->GetVertexShader()->GetShaderResHelper();
-		Unit->ShaderResHelper.Copy(Res);
-	}
-
-	{
-		const GameEngineShaderResHelper& Res = Unit->Pipe->GetPixelShader()->GetShaderResHelper();
-		Unit->ShaderResHelper.Copy(Res);
-	}
-
 	if (true == Unit->ShaderResHelper.IsConstantBuffer("TransformData"))
 	{
 		const TransformData& Data = GetTransform()->GetTransDataRef();
 		Unit->ShaderResHelper.SetConstantBufferLink("TransformData", Data);
 	}
 
+	if (true == Unit->ShaderResHelper.IsConstantBuffer("RenderBaseValue"))
+	{
+		Unit->ShaderResHelper.SetConstantBufferLink("RenderBaseValue", BaseValue);
+	}
 
 	GetTransform()->GetWorldMatrix();
 }
