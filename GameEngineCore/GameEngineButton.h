@@ -45,12 +45,12 @@ public:
 		PressImage = _ImageName;
 	}
 
+	std::shared_ptr<GameEngineUIRenderer> Render;
 protected:
 	void Start() override;
 	void Update(float _Delta) override;
 
 private:
-	std::shared_ptr<GameEngineUIRenderer> Render;
 	std::function<void()> Click;
 
 	std::string_view ReleaseImage = "";

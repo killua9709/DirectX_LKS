@@ -49,6 +49,8 @@ void GameEngineButton::Update(float _Delta)
 	MouseData.SPHERE.Center = Mouse.DirectFloat3;
 	MouseData.SPHERE.Radius = 0.0f;
 
+	GameEngineTransform* test = Render->GetTransform();
+
 	if (true == GameEngineTransform::AABB2DToSpehre2D(Render->GetTransform()->GetCollisionData(), MouseData))
 	{
 		if(HoverImage != "")

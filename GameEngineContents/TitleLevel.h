@@ -1,5 +1,8 @@
 #pragma once
 #include <GameEngineCore\GameEngineLevel.h>
+#include <GameEngineCore/GameEngineButton.h>
+#include <GameEnginePlatform/GameEngineSound.h>
+
 
 // 설명 :
 class TitleLevel : public GameEngineLevel
@@ -16,6 +19,7 @@ public:
 	TitleLevel& operator=(TitleLevel&& _Other) noexcept = delete;
 
 	std::shared_ptr<class FadeEffect> FEffect;
+	GameEngineSoundPlayer BgmPlayer;
 
 
 protected:
@@ -29,6 +33,7 @@ private:
 	std::shared_ptr<class TestObject> Logo;
 	std::shared_ptr<class TestObject> Logo2;
 	std::shared_ptr<class TestObject> Logo3;
+	std::shared_ptr<class TestObject> Logo4;
 	std::shared_ptr<class TestObject> BackGround;
 
 	//오브젝트변수
@@ -36,9 +41,10 @@ private:
 	bool First = false;
 
 	//버튼 오브젝트
-	std::shared_ptr<class TestObject> Button1;
-	std::shared_ptr<class TestObject> Button2;
-	std::shared_ptr<class TestObject> Button3;
-	std::shared_ptr<class TestObject> Button4;
+	std::shared_ptr<class GameEngineButton> Button1;
+	std::shared_ptr<class GameEngineButton> Button2;
+	std::shared_ptr<class GameEngineButton> Button3;
+	std::shared_ptr<class GameEngineButton> Button4;
+	std::shared_ptr<class GameEngineButton> Button5;
 };
 
